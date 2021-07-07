@@ -1,0 +1,18 @@
+{
+  "name": "onemustfall",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "acorn": "^6.4.2",
+    "acorn-globals": "^4.3.4",
+    "acorn-walk": "^6.2.0",
+    "browser-sync": "^2.27.4",
+    "parcel": "^2.0.0-nightly.389",
+    "phaser": "^3.55.2"
+  }
+}

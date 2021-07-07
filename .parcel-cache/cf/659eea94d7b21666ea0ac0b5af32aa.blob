@@ -1,0 +1,62 @@
+const Phaser = require("phaser");
+
+let gameState = {
+  player: {},
+  playerSpeed: {},
+  computer: {},
+  computerSpeed: {},
+  computerSprite: {},
+  playerHealthBar: {},
+  computerHealthBar: {},
+  attackButton: {},
+  defendButton: {},
+  specialButton: {},
+  information: {},
+  playerMove: {},
+  computerMove: {},
+  waveCount: 0,
+  opponents: []
+};
+
+function preload() {
+  this.load.spritesheet('triFighter', './assets/triFighter/triFighter.png', {
+    frameWidth: 256,
+    frameHeight: 256
+  });
+  this.load.spritesheet('fight', './assets/fight.png', {
+    frameWidth: 256,
+    frameHeight: 256
+  });
+}
+
+function create() {
+  gameState.information = this.add.sprite(800, 200, 'fight');
+  gameState.player = this.physics.add.sprite(150, 600, 'triFighter').setScale(.8);
+}
+
+function update() {}
+
+const config = {
+  type: Phaser.AUTO,
+  width: 1600,
+  height: 900,
+  backgroundColor: 0x4297f1,
+  scene: {
+    preload,
+    create,
+    update
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: 0,
+      enableBody: true
+    }
+  }
+};
+
+if (module.hot) {
+  module.hot.accept();
+}
+
+const game = new Phaser.Game(config);
