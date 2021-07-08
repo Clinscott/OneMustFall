@@ -19,18 +19,58 @@ let gameState = {
   };
   
 function preload(){
-    this.load.spritesheet('triFighter', './assets/triFighter/triFighter.png', { frameWidth: 256, frameHeight: 256});
+    this.load.spritesheet('triFighter', './assets/triFighter/triFighterMoves.png', { frameWidth: 256, frameHeight: 256});
     this.load.spritesheet('fight', './assets/fight.png', { frameWidth: 256, frameHeight: 256});
 }
 
 function create(){
     gameState.information = this.add.sprite(800, 200, 'fight');
-    gameState.player = this.physics.add.sprite(150, 600, 'triFighter').setScale(.8);
+    gameState.player = this.physics.add.sprite(150, 600, 'triFighter').setScale(1);
+    
+    gameState.playerMove.triMoveUp = this.anims.create({
+        key: 'triMoveUp',
+        frames: this.anims.generateFrameNumbers('triFighter', {frames: [1]}),
+        frameRate:8,
+        repeat: -1
+    });
+
+    gameState.playerMove.triMoveRight = this.anims.create({
+        key: 'triMoveRight',
+        frames: this.anims.generateFrameNumbers('triFighter', {frames: [2]}),
+        frameRate: 8,
+        repeat: -1
+    });
+
+    gameState.playerMove.triMoveDown = this.anims.create({
+        key: 'triMoveDown',
+        frames: this.anims.generateFrameNumbers('triFighter', {frames: [3]}),
+        frameRate: 8,
+        repeat: -1
+    });
+
+    gameState.playerMove.triMoveLeft = this.anims.create({
+        key: 'triMoveLeft',
+        frames: this.anims.generateFrameNumbers('triFighter', {frames: [4]}),
+        frameRate: 8,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'triMoveUpRight',
+        frames: this.anims.generateFrameNumbers('triFighter', {frames: [1, 2]}),
+        frameRate: 10,
+        repeat: -1
+    })
+
+
+
+    
+    
     this.physics.world.setBounds()
 }
 
 function update(){
-// Arrow keys that will move Bob in 4 directions
+// Arrow keys that will move tri in 4 directions
 const cursors = this.input.keyboard.createCursorKeys();
 // Add variables that store if a specific arrow key is being pressed
 const rightArrow = cursors.right.isDown;
@@ -40,9 +80,13 @@ const downArrow = cursors.down.isDown;
 
 if(rightArrow && upArrow){
     moveTriUpRight();
-} else if(leftArrow && upArrow){
+}else if(leftArrow && upArrow){
     moveTriUpLeft();
-}else if(rightArrow){
+}else if (rightArrow && downArrow){
+    moveTriDownRight();
+} else if(downArrow && leftArrow){
+    moveTriDownLeft();
+} else if(rightArrow){
     moveTriRight();
 } else if(leftArrow){
     moveTriLeft()
@@ -57,48 +101,61 @@ if(rightArrow && upArrow){
 const triXCoord = gameState.player.x;
 const triYCoord = gameState.player.y;
 
-    // Helper functions to move Bob in 4 directions
+    // Helper functions to move tri in 8 directions
     function moveTriRight() {
         gameState.player.flipX = false;
-        gameState.player.setTexture('triFighter');
+        gameState.player.play('triMoveRight');
         gameState.player.setVelocityX(150 * gameState.playerSpeed);
         gameState.player.setVelocityY(0);
       }
   
       function moveTriLeft() {
-        // NOTE: By default Bob looks to the right so we flip the image if moving left
         gameState.player.flipX = false;
-        gameState.player.setTexture('triFighter');
+        gameState.player.play('triMoveLeft');
         gameState.player.setVelocityX(-150 * gameState.playerSpeed);
         gameState.player.setVelocityY(0);
       }
   
       function moveTriUp() {
         gameState.player.flipX = false;
-        gameState.player.setTexture('triFighter');
+        gameState.player.play('triMoveUp');
         gameState.player.setVelocityX(0);
         gameState.player.setVelocityY(-150 * gameState.playerSpeed);
       }
   
       function moveTriDown() {
         gameState.player.flipX = false;
-        gameState.player.setTexture('triFighter');
+        gameState.player.play('triMoveDown');
         gameState.player.setVelocityX(0);
         gameState.player.setVelocityY(150 * gameState.playerSpeed);
       }
 
       function moveTriUpRight(){
           gameState.player.flipX = false;
-          gameState.player.setTexture('triFighter');
-          gameState.player.setVelocityX(150 * gameState.playerSpeed);
-          gameState.player.setVelocityY(-150 * gameState.playerSpeed);
+          gameState.player.play('triMoveUpRight', 10, true);
+          gameState.player.setVelocityX(100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(-100 * gameState.playerSpeed);
       }
 
       function moveTriUpLeft(){
           gameState.player.flipX = false;
           gameState.player.setTexture('triFighter');
-          gameState.player.setVelocityX(-150 * gameState.playerSpeed);
-          gameState.player.setVelocityY(-150 * gameState.playerSpeed);
+          gameState.player.setVelocityX(-100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(-100 * gameState.playerSpeed);
+      }
+
+      function moveTriDownRight(){
+          gameState.player.flipX = false;
+          gameState.player.setTexture('triFighter');
+          gameState.player.setVelocityX(100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(100 * gameState.playerSpeed);
+      }
+
+      function moveTriDownLeft(){
+          gameState.player.flipX = false;
+          gameState.player.setTexture('triFighter');
+          gameState.player.setVelocityX(-100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(100 * gameState.playerSpeed);
       }
       
       function stopTri(){
@@ -115,6 +172,7 @@ const config = {
     width: 1600,
     height: 900,
     backgroundColor: 0x4297f1,
+    pixelArt: true,
     scene: {
         preload,
         create,
