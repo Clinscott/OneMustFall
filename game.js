@@ -25,13 +25,14 @@ function preload(){
 }
 
 function create(){
-    gameState.information = this.add.sprite(800, 200, 'fight');
-    gameState.player = this.physics.add.sprite(150, 600, 'triFighter').setScale(1);
-    this.physics.world.setBounds(100, 100, 1500, 700);
+    gameState.information = this.add.sprite(640, 64, 'fight').setScale(.5);
+    gameState.player = this.physics.add.sprite(256, 600, 'triFighter').setScale(.5);
+    this.physics.world.setBounds(64, 128, 1152, 608);
     gameState.player.setCollideWorldBounds(true);
     gameState.player.body.collideWorldBounds = true;
     gameState.music = this.sound.add('theme');
     gameState.music.play();
+    gameState.playerMove.active = false;
 
     gameState.playerMove.triMoveUp = this.anims.create({
         key: 'triMoveUp',
@@ -96,6 +97,13 @@ function create(){
         repeat: 0
     });
 
+    gameState.playerMove.triKick = this.anims.create({
+        key:'triKick',
+        frames: this.anims.generateFrameNumbers('triFighter', {frames:[7, 8, 9, 0]}),
+        frameRate: 10,
+        repeat: 0
+    });
+
     
 }
 
@@ -108,12 +116,18 @@ const leftArrow = cursors.left.isDown;
 const upArrow = cursors.up.isDown;
 const downArrow = cursors.down.isDown;
 
-const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).isDown;
+const aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown;
+const sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown;
+
     
-if(spaceKey){
+if(aKey){
     triPunch();
-    return;
-}else if(rightArrow && upArrow){
+}
+if(sKey){
+    triKick();
+}
+
+if(rightArrow && upArrow){
     moveTriUpRight();
 }else if(leftArrow && upArrow){
     moveTriUpLeft();
@@ -138,79 +152,112 @@ const triYCoord = gameState.player.y;
 
     // Helper functions to move tri in 8 directions
     function moveTriRight() {
+        if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveRight');
         gameState.player.setVelocityX(150 * gameState.playerSpeed);
-        gameState.player.setVelocityY(0);
+        gameState.player.setVelocityY(0);}
       };
   
       function moveTriLeft() {
+        if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveLeft');
         gameState.player.setVelocityX(-150 * gameState.playerSpeed);
-        gameState.player.setVelocityY(0);
+        gameState.player.setVelocityY(0);}
       };
   
       function moveTriUp() {
+        if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveUp');
         gameState.player.setVelocityX(0);
-        gameState.player.setVelocityY(-150 * gameState.playerSpeed);
+        gameState.player.setVelocityY(-150 * gameState.playerSpeed);}
       };
   
       function moveTriDown() {
+        if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveDown');
         gameState.player.setVelocityX(0);
-        gameState.player.setVelocityY(150 * gameState.playerSpeed);
+        gameState.player.setVelocityY(150 * gameState.playerSpeed);}
       };
 
       function moveTriUpRight(){
+        if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveUpRight');
           gameState.player.setVelocityX(100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(-100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(-100 * gameState.playerSpeed);}
       };
 
       function moveTriUpLeft(){
+        if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveUpLeft');
           gameState.player.setVelocityX(-100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(-100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(-100 * gameState.playerSpeed);}
       };
 
       function moveTriDownRight(){
+        if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveDownRight');
           gameState.player.setVelocityX(100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(100 * gameState.playerSpeed);}
       };
 
       function moveTriDownLeft(){
+        if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveDownLeft');
           gameState.player.setVelocityX(-100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(100 * gameState.playerSpeed);
+          gameState.player.setVelocityY(100 * gameState.playerSpeed);}
       };
       
       function stopTri(){
+          if(!gameState.playerMove.active){
           gameState.player.setVelocityX(0);
           gameState.player.setVelocityY(0);
+        }
       };
 
       function triPunch(){
-          gameState.player.flixX = false;
+        if(!gameState.playerMove.active){
+          gameState.player.flipX = false;
           gameState.player.play('triPunch', 10, true);
           gameState.player.setVelocityX(0);
           gameState.player.setVelocityY(0);
+          gameState.playerMove.active = true;
+          setTimeout(() => {
+            triHold()
+          }, 400);}
       };
-    }
+
+      function triKick(){
+        if(!gameState.playerMove.active){
+            gameState.player.flipX = false;
+            gameState.player.play('triKick', 10, true);
+            gameState.player.setVelocityX(0);
+            gameState.player.setVelocityY(0);
+            gameState.playerMove.active = true;
+            setTimeout(() => {
+              triHold()
+            }, 400);}
+        };
+
+      function triHold(){
+          gameState.playerMove.active = false;
+      }
+
+
+    };
 
 
 const config = {
     type: Phaser.AUTO,
-    width: 1600,
-    height: 900,
+    width: 1280,
+    height: 768,
     backgroundColor: 0x4297f1,
     pixelArt: true,
     scene: {
@@ -225,8 +272,8 @@ const config = {
           enableBody: true,
           x: 0,
           y: 0,
-          width: 1600,
-          height:900
+          width: 1280,
+          height: 768
         },
     checkCollision:{
         up: true,
