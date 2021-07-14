@@ -11,12 +11,13 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-          gravity: 300,
-          enableBody: true,
-          x: 0,
-          y: 0,
-          width: 1280,
-          height: 768
+            debug: true,
+            gravity: 300,
+            enableBody: true,
+            x: 0,
+            y: 0,
+            width: 1280,
+            height: 768
         },
     checkCollision:{
         up: true,
