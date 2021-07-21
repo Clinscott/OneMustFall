@@ -9,9 +9,8 @@ let gameState = {
     angleSprite: {},
     playerHealthBar: {},
     computerHealthBar: {},
-    attackButton: {},
-    defendButton: {},
-    specialButton: {},
+    triAngles: 0,
+    triAnglesTotal: {},
     information: {},
     playerMove: {},
     playerInformation: {},
@@ -74,7 +73,7 @@ create(){
 
     gameState.computerInformation = {
       name: 'SquareFighter',
-      health: 40
+      health: 4
     };
 
     const style = {
@@ -85,21 +84,33 @@ create(){
   
     gameState.playerHealthBar = this.add.text(45, 45, `HP: ${gameState.playerInformation.health}`, style);
     gameState.computerHealthBar = this.add.text(800, 45, `HP: ${gameState.computerInformation.health}`, style);
+    gameState.triAnglesTotal = this.add.text(45, 90, `triAngles: ${gameState.triAngles}`, style);
     
     this.physics.add.collider(gameState.player, gameState.computerSprite, ()=>{
+
+      if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit && gameState.computerInformation.health > 0){
+        gameState.playerInformation.health--;
+        gameState.playerHealthBar.text = `HP: ${gameState.playerInformation.health}`;
+        moveTriLeft();
+      }
    
     if(gameState.computerInformation.health > 0 && gameState.playerMove.activeHit){
       gameState.computerInformation.health -= 1;
-      squareHit();
       gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
-      }
+      gameState.computerSprite.activeHit = true;
+      squareHit();    
+    };
       if(gameState.computerInformation.health == 0 && gameState.playerMove.activeHit){
         squareDead();
-        return;
       }
       if(!gameState.computerSprite.active){
-
+        gameState.triAngles +=1 ;
+        gameState.triAnglesTotal.text = `triAngles: ${gameState.triAngles}`;
+        gameState.computerSprite.disableBody().setActive(false).setVisible(false);
       }
+
+    
+      
     }
     );
    
@@ -245,8 +256,21 @@ create(){
     gameState.computerSprite.setVelocityX(0);
     setTimeout(()=>{
       gameState.computerSprite.active = false;
-    },1000)
+    },1000);
+    setTimeout(()=>{
+      gameState.computerSprite.disableBody().setActive(false).setVisible(false);
+    }, 10000);
     }
+  };
+
+  function moveTriLeft() {
+    gameState.player.play('triMoveLeft');
+    gameState.player.setVelocityX(-150 * gameState.playerSpeed);
+    gameState.player.setVelocityY(0);
+    gameState.playerMove.active = true;
+    setTimeout(()=>{
+      gameState.playerMove.active = false;
+    }, 500);
   }
 }
 
@@ -288,7 +312,7 @@ if(rightArrow && upArrow){
     moveTriDown();
 } else {stopTri();}
 
-if(gameState.computerInformation.health > 0){
+if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
   squareMove();
 }
 
@@ -409,6 +433,7 @@ if(gameState.computerInformation.health > 0){
       function triHold(){
           gameState.playerMove.active = false;
           gameState.playerMove.activeHit = false;
+          gameState.computerSprite.activeHit = false;
       };
 
       function squareHit(){

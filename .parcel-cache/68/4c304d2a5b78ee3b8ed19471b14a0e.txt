@@ -9173,7 +9173,7 @@
 86/mnt/e/programming/me/onemustfall/node_modules/@parcel/reporter-cli/src/CLIReporter.js499162500000000000 0
 80/mnt/e/programming/me/onemustfall/node_modules/core-js/features/instance/some.js499162500000000000 0
 72/mnt/e/programming/me/onemustfall/node_modules/define-property/README.md1516998234000000000 0
-46/mnt/e/programming/me/onemustfall/gameScene.js1626203569219777100 0
+46/mnt/e/programming/me/onemustfall/gameScene.js1626821850743532100 0
 90/mnt/e/programming/me/onemustfall/node_modules/caniuse-lite/data/features/iframe-srcdoc.js499162500000000000 0
 66/mnt/e/programming/me/onemustfall/node_modules/lodash/fp/sortBy.js499162500000000000 0
 69/mnt/e/programming/me/onemustfall/node_modules/core-js/es/typed-array1625158516719277800 1
@@ -9947,7 +9947,7 @@
 62/mnt/e/programming/me/onemustfall/node_modules/lodash/fp/gt.js499162500000000000 0
 100/mnt/e/programming/me/onemustfall/node_modules/postcss-modules/node_modules/postcss/lib/postcss.d.ts499162500000000000 0
 74/mnt/e/programming/me/onemustfall/node_modules/ajv/scripts/compile-dots.js499162500000000000 0
-50/mnt/e/programming/me/onemustfall/dist/game.js.map1626282700365267900 0
+50/mnt/e/programming/me/onemustfall/dist/game.js.map1626821851319056900 0
 106/mnt/e/programming/me/onemustfall/node_modules/bs-recipes/recipes/webpack.typescript.react/typings/browser1625156417131541300 1
 75/mnt/e/programming/me/onemustfall/node_modules/es-abstract/2020/MakeTime.js499162500000000000 0
 78/mnt/e/programming/me/onemustfall/node_modules/css-tree/lib/tokenizer/utils.js499162500000000000 0
@@ -10091,7 +10091,7 @@
 98/mnt/e/programming/me/onemustfall/node_modules/phaser/src/tweens/typedefs/TweenOnRepeatCallback.js499162500000000000 0
 91/mnt/e/programming/me/onemustfall/node_modules/@swc/helpers/lib/_class_private_field_set.js499162500000000000 0
 65/mnt/e/programming/me/onemustfall/node_modules/lodash/conforms.js499162500000000000 0
-46/mnt/e/programming/me/onemustfall/dist/game.js1626282700286269100 0
+46/mnt/e/programming/me/onemustfall/dist/game.js1626821851202057100 0
 62/mnt/e/programming/me/onemustfall/node_modules/.bin/esgenerate1625158522299777500 0
 89/mnt/e/programming/me/onemustfall/node_modules/phaser/src/display/align/to/RightCenter.js499162500000000000 0
 61/mnt/e/programming/me/onemustfall/node_modules/etag/README.md1505269862000000000 0
@@ -13617,7 +13617,7 @@
 93/mnt/e/programming/me/onemustfall/node_modules/browser-sync-ui/static/components/buttons.html499162500000000000 0
 73/mnt/e/programming/me/onemustfall/node_modules/object-inspect/test/err.js499162500000000000 0
 77/mnt/e/programming/me/onemustfall/node_modules/@parcel/utils/src/sourcemap.js499162500000000000 0
-38/mnt/e/programming/me/onemustfall/dist1626282700368766500 1
+38/mnt/e/programming/me/onemustfall/dist1626821851326056500 1
 92/mnt/e/programming/me/onemustfall/node_modules/browser-sync-ui/static/components/footer.html499162500000000000 0
 91/mnt/e/programming/me/onemustfall/node_modules/browser-sync-ui/static/components/forms.html499162500000000000 0
 81/mnt/e/programming/me/onemustfall/node_modules/which-boxed-primitive/package.json499162500000000000 0
