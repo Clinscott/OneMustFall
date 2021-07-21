@@ -1,0 +1,15 @@
+const Phaser = require('phaser');
+
+class EndScene extends Phaser.Scene {
+  constructor() {
+    super({
+      key: 'EndScene'
+    });
+  }
+
+}
+
+;
+module.exporte = {
+  EndScene
+};

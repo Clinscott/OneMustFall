@@ -68,7 +68,11 @@ create(){
 
     gameState.playerInformation = {
       name: 'TriFighter',
-      health: 3
+      health: 3,
+      base: {
+        level: 1,
+        health: 2
+      }
     };
 
     gameState.computerInformation = {
@@ -89,28 +93,18 @@ create(){
     this.physics.add.collider(gameState.player, gameState.computerSprite, ()=>{
 
       if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit && gameState.computerInformation.health > 0){
-        gameState.playerInformation.health--;
-        gameState.playerHealthBar.text = `HP: ${gameState.playerInformation.health}`;
-        moveTriLeft();
+        triWasHit();
       }
    
     if(gameState.computerInformation.health > 0 && gameState.playerMove.activeHit){
-      gameState.computerInformation.health -= 1;
-      gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
-      gameState.computerSprite.activeHit = true;
       squareHit();    
     };
       if(gameState.computerInformation.health == 0 && gameState.playerMove.activeHit){
         squareDead();
       }
       if(!gameState.computerSprite.active){
-        gameState.triAngles +=1 ;
-        gameState.triAnglesTotal.text = `triAngles: ${gameState.triAngles}`;
-        gameState.computerSprite.disableBody().setActive(false).setVisible(false);
-      }
-
-    
-      
+        triPickUpAngles();
+      }  
     }
     );
    
@@ -134,112 +128,112 @@ create(){
       return assignedCoord;
     }
 
-    gameState.playerMove.triMoveUp = this.anims.create({
+    this.anims.create({
         key: 'triMoveUp',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [1, 0]}),
         frameRate:8,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveRight = this.anims.create({
+    this.anims.create({
         key: 'triMoveRight',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [2, 0]}),
         frameRate: 8,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveDown = this.anims.create({
+    this.anims.create({
         key: 'triMoveDown',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [3, 0]}),
         frameRate: 8,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveLeft = this.anims.create({
+    this.anims.create({
         key: 'triMoveLeft',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [4, 0]}),
         frameRate: 8,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveUpRight = this.anims.create({
+    this.anims.create({
         key: 'triMoveUpRight',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [15, 0]}),
         frameRate: 10,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveUpLeft = this.anims.create({
+    this.anims.create({
         key: 'triMoveUpLeft',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [16, 0]}),
         frameRate: 10,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveDownRight = this.anims.create({
+    this.anims.create({
         key: 'triMoveDownRight',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [14, 0]}),
         frameRate: 10,
         repeat: 0
     });
 
-    gameState.playerMove.triMoveDownLeft = this.anims.create({
+    this.anims.create({
         key: 'triMoveDownLeft',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [13, 0]}),
         frameRate: 10,
         repeat: 0
     });
 
-    gameState.playerMove.triPunch = this.anims.create({
+    this.anims.create({
         key: 'triPunch',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [10, 11, 12, 12, 11, 10, 0]}),
         frameRate: 15,
         repeat: 0
     });
 
-    gameState.playerMove.triKick = this.anims.create({
+    this.anims.create({
         key:'triKick',
         frames: this.anims.generateFrameNumbers('triFighter', {frames:[7, 8, 9, 9, 8, 7, 0]}),
         frameRate: 10,
         repeat: 0
     });
 
-    gameState.computerMove.squareRight = this.anims.create({
+    this.anims.create({
       key:'squareRight',
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[1, 0]}),
       frameRate: 10,
       repeat: 0
     });
 
-    gameState.computerMove.squareDown = this.anims.create({
+    this.anims.create({
       key:'squareDown',
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[2, 0]}),
       frameRate: 10,
       repeat: 0
     });
 
-    gameState.computerMove.squareLeft = this.anims.create({
+    this.anims.create({
       key:'squareLeft',
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[3]}),
       frameRate: 10,
       repeat: 0
     });
 
-    gameState.computerMove.squareUp = this.anims.create({
+    this.anims.create({
       key:'squareUp',
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[4, 0]}),
       frameRate: 10,
       repeat: 0
     });
 
-    gameState.computerMove.squareHit = this.anims.create({
+    this.anims.create({
       key:'squareHit',
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[5, 6, 7, 6, 5, 0]}),
       frameRate: 10,
       repeat: 0
     });
 
-    gameState.computerMove.squareDead = this.anims.create({
+    this.anims.create({
       key:'squareDead',
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[5, 6, 7, 6, 7, 8, 9, 10]}),
       frameRate: 10,
@@ -249,7 +243,13 @@ create(){
   
   function squareHit(){
       gameState.computerSprite.play('squareHit', true);
+      gameState.computerInformation.health --
+      gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
+      gameState.computerSprite.activeHit = true;
   }
+
+  gameState.computer.squareHit = squareHit;
+
   function squareDead(){
     if(gameState.computerSprite.active){
     gameState.computerSprite.play('squareDead', true);
@@ -263,15 +263,31 @@ create(){
     }
   };
 
-  function moveTriLeft() {
+  gameState.computer.squareDead = squareDead;
+
+  function triWasHit() {
     gameState.player.play('triMoveLeft');
     gameState.player.setVelocityX(-150 * gameState.playerSpeed);
     gameState.player.setVelocityY(0);
     gameState.playerMove.active = true;
+    gameState.playerInformation.health--;
+    gameState.playerHealthBar.text = `HP: ${gameState.playerInformation.health}`;
     setTimeout(()=>{
       gameState.playerMove.active = false;
     }, 500);
+  };
+
+  gameState.playerMove.triWasHit = triWasHit;
+
+  function triPickUpAngles(){
+    gameState.triAngles +=1 ;
+    gameState.triAnglesTotal.text = `triAngles: ${gameState.triAngles}`;
+    gameState.computerSprite.disableBody().setActive(false).setVisible(false);
   }
+
+  gameState.playerMove.triPickUpAngles = triPickUpAngles;
+
+
 }
 
 update(){
@@ -295,53 +311,58 @@ if(sKey){
 }
 
 if(rightArrow && upArrow){
-    moveTriUpRight();
+    triMoveUpRight();
 }else if(leftArrow && upArrow){
-    moveTriUpLeft();
+    triMoveUpLeft();
 }else if (rightArrow && downArrow){
-    moveTriDownRight();
+    triMoveDownRight();
 } else if(downArrow && leftArrow){
-    moveTriDownLeft();
+    triMoveDownLeft();
 } else if(rightArrow){
-    moveTriRight();
+    triMoveRight();
 } else if(leftArrow){
-    moveTriLeft()
+    triMoveLeft()
 } else if(upArrow){
-    moveTriUp();
+    triMoveUp();
 }else if(downArrow){
-    moveTriDown();
-} else {stopTri();}
+    triMoveDown();
+} else {triStop();}
 
 if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
   squareMove();
 }
 
     // Helper functions to move tri in 8 directions
-    function moveTriRight() {
+    function triMoveRight() {
         if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveRight');
         gameState.player.setVelocityX(150 * gameState.playerSpeed);
         gameState.player.setVelocityY(0);}
       };
+      gameState.playerMove.triMoveRight = triMoveRight;
   
-      function moveTriLeft() {
+      function triMoveLeft() {
         if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveLeft');
         gameState.player.setVelocityX(-150 * gameState.playerSpeed);
         gameState.player.setVelocityY(0);}
       };
+
+      gameState.playerMove.triMoveLeft = triMoveLeft;
   
-      function moveTriUp() {
+      function triMoveUp() {
         if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveUp');
         gameState.player.setVelocityX(0);
         gameState.player.setVelocityY(-150 * gameState.playerSpeed);}
       };
+
+      gameState.playerMove.triMoveUp = triMoveUp;
   
-      function moveTriDown() {
+      function triMoveDown() {
         if(!gameState.playerMove.active){
         gameState.player.flipX = false;
         gameState.player.play('triMoveDown');
@@ -349,7 +370,9 @@ if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeH
         gameState.player.setVelocityY(150 * gameState.playerSpeed);}
       };
 
-      function moveTriUpRight(){
+      gameState.playerMove.triMoveDown = triMoveDown;
+
+      function triMoveUpRight(){
         if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveUpRight');
@@ -357,7 +380,9 @@ if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeH
           gameState.player.setVelocityY(-100 * gameState.playerSpeed);}
       };
 
-      function moveTriUpLeft(){
+      gameState.playerMove.triMoveUpRight = triMoveUpRight;
+
+      function triMoveUpLeft(){
         if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveUpLeft');
@@ -365,28 +390,36 @@ if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeH
           gameState.player.setVelocityY(-100 * gameState.playerSpeed);}
       };
 
-      function moveTriDownRight(){
+      gameState.playerMove.triMoveUpLeft = triMoveUpLeft;
+
+      function triMoveDownRight(){
         if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveDownRight');
           gameState.player.setVelocityX(100 * gameState.playerSpeed);
           gameState.player.setVelocityY(100 * gameState.playerSpeed);}
       };
+      
+      gameState.playerMove.triMoveDownRight = triMoveDownRight;
 
-      function moveTriDownLeft(){
+      function triMoveDownLeft(){
         if(!gameState.playerMove.active){
           gameState.player.flipX = false;
           gameState.player.play('triMoveDownLeft');
           gameState.player.setVelocityX(-100 * gameState.playerSpeed);
           gameState.player.setVelocityY(100 * gameState.playerSpeed);}
       };
+
+      gameState.playerMove.triMoveDownLeft = triMoveDownLeft;
       
-      function stopTri(){
+      function triStop(){
           if(!gameState.playerMove.active){
           gameState.player.setVelocityX(0);
           gameState.player.setVelocityY(0);
         }
       };
+
+      gameState.playerMove.triStop = triStop;
 
       function triPunch(){
         if(!gameState.playerMove.active){
@@ -409,6 +442,8 @@ if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeH
           }, 400);}
       };
 
+      gameState.playerMove.triPunch = triPunch;
+    
       function triKick(){
         if(!gameState.playerMove.active){
             gameState.player.flipX = false;
@@ -430,19 +465,22 @@ if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeH
               triHold()}, 700);}
         };
 
+        gameState.playerMove.triKick = triKick;
+
       function triHold(){
           gameState.playerMove.active = false;
           gameState.playerMove.activeHit = false;
           gameState.computerSprite.activeHit = false;
       };
 
-      function squareHit(){
-          gameState.computerSprite.play('squareHit', true);
-      }
+      gameState.playerMove.triHold = triHold;
+
       function squareMove(){
         gameState.computerSprite.setVelocityX(-10);
         gameState.computerSprite.play('squareLeft', true);
       }
+
+      gameState.computer.squareMove = squareMove;
       
      
      

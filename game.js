@@ -1,5 +1,6 @@
 const Phaser = require("phaser");
 const {GameScene} = require('./gameScene');
+const {EndScene} = require('./endScene');
 
 const config = {
     type: Phaser.AUTO,
@@ -12,7 +13,6 @@ const config = {
         default: 'arcade',
         arcade: {
             debug: true,
-            gravity: 300,
             enableBody: true,
             x: 0,
             y: 0,
