@@ -4,7 +4,7 @@ let gameState = {
     player: {},
     playerSpeed: 2,
     computer: {},
-    computerSpeed: 1,
+    computerSpeed: 3,
     computerSprite: {},
     angleSprite: {},
     playerHealthBar: {},
@@ -22,11 +22,7 @@ let gameState = {
     numCoordinates: {}
   };
 
-const triXCoord = gameState.player.x;
-const triYCoord = gameState.player.y;
 
-const squareXCoord = gameState.computerSprite.x;
-const squareYCoord = gameState.computerSprite.y;
 
 let randomCoord;
 
@@ -62,6 +58,7 @@ create(){
     gameState.computerSprite = this.physics.add.sprite(randomCoord.x, randomCoord.y, 'squareFighter').setScale(2);
     gameState.computerSprite.setCollideWorldBounds(true);
     gameState.computerSprite.body.collideWorldBounds = true;
+    gameState.computerSprite.body.onWorldBounds = true;
     gameState.computerSprite.setCircle(8, 7, 7);
     gameState.computerSprite.active = true;
     
@@ -69,10 +66,8 @@ create(){
     gameState.playerInformation = {
       name: 'TriFighter',
       health: 3,
-      base: {
-        level: 1,
-        health: 2
-      }
+      baseHealth: 2,
+      baseLevel: 1
     };
 
     gameState.computerInformation = {
@@ -89,6 +84,7 @@ create(){
     gameState.playerHealthBar = this.add.text(45, 45, `HP: ${gameState.playerInformation.health}`, style);
     gameState.computerHealthBar = this.add.text(800, 45, `HP: ${gameState.computerInformation.health}`, style);
     gameState.triAnglesTotal = this.add.text(45, 90, `triAngles: ${gameState.triAngles}`, style);
+    gameState.baseHealthBar = this.add.text(45, 135, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
     
     this.physics.add.collider(gameState.player, gameState.computerSprite, ()=>{
 
@@ -107,7 +103,19 @@ create(){
       }  
     }
     );
-   
+
+const triXCoord = gameState.player.x;
+const triYCoord = gameState.player.y;
+
+this.physics.world.on('worldbounds', (body)=>{
+  gameState.playerInformation.baseHealth -=1
+  gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
+  squareDead();
+});
+
+function onWorldBounds(){
+
+}
 
 
     function generateComputerEntryCoord(){
@@ -238,7 +246,7 @@ create(){
       frames: this.anims.generateFrameNumbers('squareFighter', {frames:[5, 6, 7, 6, 7, 8, 9, 10]}),
       frameRate: 10,
       repeat: 0
-    });
+    })
 
   
   function squareHit(){
@@ -254,6 +262,8 @@ create(){
     if(gameState.computerSprite.active){
     gameState.computerSprite.play('squareDead', true);
     gameState.computerSprite.setVelocityX(0);
+    gameState.computerInformation.health = 0;
+    //delete gameState.numCoordinates[`x${assignedCoord.x}y${assignedCoord.y}`];
     setTimeout(()=>{
       gameState.computerSprite.active = false;
     },1000);
@@ -331,6 +341,17 @@ if(rightArrow && upArrow){
 if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
   squareMove();
 }
+/*
+const enemyXCoord = gameState.computerSprite.x;
+const enemyYCoord = gameState.computerSprite.y;
+
+   
+if(enemyXCoord <= 100){
+  gameState.playerInformation.baseHealth -=1
+  gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
+  gameState.computerInformation.health = 0;
+}*/
+
 
     // Helper functions to move tri in 8 directions
     function triMoveRight() {
@@ -476,7 +497,7 @@ if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeH
       gameState.playerMove.triHold = triHold;
 
       function squareMove(){
-        gameState.computerSprite.setVelocityX(-10);
+        gameState.computerSprite.setVelocityX(-25 * gameState.computerSpeed);
         gameState.computerSprite.play('squareLeft', true);
       }
 
