@@ -22,9 +22,10 @@ let gameState = {
     numCoordinates: {}
   };
 
-
-
+let timedEvent;
 let randomCoord;
+
+const game = this;
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -32,7 +33,7 @@ class GameScene extends Phaser.Scene {
         key: 'GameScene'
       })
     }
-  
+
 preload(){
     this.load.spritesheet('triFighter', './assets/triFighter/triFighterFullMoveSet.png', { frameWidth: 256, frameHeight: 256, endFrame: 16});
     this.load.spritesheet('fight', './assets/fight.png', { frameWidth: 256, frameHeight: 256});
@@ -41,6 +42,8 @@ preload(){
 }
 
 create(){
+console.log(this)
+
     gameState.information = this.add.sprite(640, 64, 'fight').setScale(.5);
     gameState.player = this.physics.add.sprite(256, 600, 'triFighter').setScale(.5);
     this.physics.world.setBounds(64, 256, 1152, 384);
@@ -85,8 +88,10 @@ create(){
     gameState.computerHealthBar = this.add.text(800, 45, `HP: ${gameState.computerInformation.health}`, style);
     gameState.triAnglesTotal = this.add.text(45, 90, `triAngles: ${gameState.triAngles}`, style);
     gameState.baseHealthBar = this.add.text(45, 135, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
+
     
-    this.physics.add.collider(gameState.player, gameState.computerSprite, ()=>{
+    
+    this.physics.add.collider(gameState.player, gameState.computerSprite, function(){
 
       if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit && gameState.computerInformation.health > 0){
         triWasHit();
@@ -96,7 +101,7 @@ create(){
       squareHit();    
     };
       if(gameState.computerInformation.health == 0 && gameState.playerMove.activeHit){
-        squareDead();
+        squareDead.call(this);
       }
       if(!gameState.computerSprite.active){
         triPickUpAngles();
@@ -114,7 +119,6 @@ this.physics.world.on('worldbounds', (body)=>{
 });
 
 function onWorldBounds(){
-
 }
 
 
@@ -263,13 +267,13 @@ function onWorldBounds(){
     gameState.computerSprite.play('squareDead', true);
     gameState.computerSprite.setVelocityX(0);
     gameState.computerInformation.health = 0;
-    //delete gameState.numCoordinates[`x${assignedCoord.x}y${assignedCoord.y}`];
-    setTimeout(()=>{
+    timedEvent = game.time.delayedCall(1000, function(){
       gameState.computerSprite.active = false;
-    },1000);
-    setTimeout(()=>{
+    }, [], game);
+    //delete gameState.numCoordinates[`x${assignedCoord.x}y${assignedCoord.y}`];
+    /*timedEvent = this.time.delayedCall(10000, ()=>{
       gameState.computerSprite.disableBody().setActive(false).setVisible(false);
-    }, 10000);
+    }, [], this);*/
     }
   };
 
