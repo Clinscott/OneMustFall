@@ -24,8 +24,7 @@ let gameState = {
 
 let timedEvent;
 let randomCoord;
-
-const game = this;
+let game;
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -53,6 +52,7 @@ console.log(this)
     //gameState.music.play();
     gameState.playerMove.active = false;
     gameState.playerMove.activeHit = false;
+    game = this;
     
 
     gameState.player.setCircle(46, 46, 100);
