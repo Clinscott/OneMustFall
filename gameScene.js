@@ -271,9 +271,9 @@ function onWorldBounds(){
       gameState.computerSprite.active = false;
     }, [], game);
     //delete gameState.numCoordinates[`x${assignedCoord.x}y${assignedCoord.y}`];
-    /*timedEvent = this.time.delayedCall(10000, ()=>{
+    timedEvent = game.time.delayedCall(10000, ()=>{
       gameState.computerSprite.disableBody().setActive(false).setVisible(false);
-    }, [], this);*/
+    }, [], game);
     }
   };
 
