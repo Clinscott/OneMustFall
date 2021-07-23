@@ -41,7 +41,6 @@ preload(){
 }
 
 create(){
-console.log(this)
 
     gameState.information = this.add.sprite(640, 64, 'fight').setScale(.5);
     gameState.player = this.physics.add.sprite(256, 600, 'triFighter').setScale(.5);
@@ -53,6 +52,7 @@ console.log(this)
     gameState.playerMove.active = false;
     gameState.playerMove.activeHit = false;
     game = this;
+    gameState.information.velocity = [0, -100, 100, -150, 150, -25, 25];
     
 
     gameState.player.setCircle(46, 46, 100);
@@ -101,7 +101,7 @@ console.log(this)
       squareHit();    
     };
       if(gameState.computerInformation.health == 0 && gameState.playerMove.activeHit){
-        squareDead.call(this);
+        squareDead();
       }
       if(!gameState.computerSprite.active){
         triPickUpAngles();
@@ -265,7 +265,7 @@ function onWorldBounds(){
   function squareDead(){
     if(gameState.computerSprite.active){
     gameState.computerSprite.play('squareDead', true);
-    gameState.computerSprite.setVelocityX(0);
+    gameState.computerSprite.setVelocityX(gameState.information.velocity[0]);
     gameState.computerInformation.health = 0;
     timedEvent = game.time.delayedCall(1000, function(){
       gameState.computerSprite.active = false;
@@ -281,14 +281,14 @@ function onWorldBounds(){
 
   function triWasHit() {
     gameState.player.play('triMoveLeft');
-    gameState.player.setVelocityX(-150 * gameState.playerSpeed);
-    gameState.player.setVelocityY(0);
+    gameState.player.setVelocityX(gameState.information.velocity[3] * gameState.playerSpeed);
+    gameState.player.setVelocityY(gameState.information.velocity[0]);
     gameState.playerMove.active = true;
     gameState.playerInformation.health--;
     gameState.playerHealthBar.text = `HP: ${gameState.playerInformation.health}`;
-    setTimeout(()=>{
+    timedEvent = game.time.delayedCall(500, ()=>{
       gameState.playerMove.active = false;
-    }, 500);
+    }, [], game);
   };
 
   gameState.playerMove.triWasHit = triWasHit;
@@ -357,90 +357,83 @@ if(enemyXCoord <= 100){
 }*/
 
 
+
     // Helper functions to move tri in 8 directions
     function triMoveRight() {
         if(!gameState.playerMove.active){
-        gameState.player.flipX = false;
         gameState.player.play('triMoveRight');
-        gameState.player.setVelocityX(150 * gameState.playerSpeed);
-        gameState.player.setVelocityY(0);}
+        gameState.player.setVelocityX(gameState.information.velocity[4] * gameState.playerSpeed);
+        gameState.player.setVelocityY(gameState.information.velocity[0]);}
       };
       gameState.playerMove.triMoveRight = triMoveRight;
   
       function triMoveLeft() {
         if(!gameState.playerMove.active){
-        gameState.player.flipX = false;
         gameState.player.play('triMoveLeft');
-        gameState.player.setVelocityX(-150 * gameState.playerSpeed);
-        gameState.player.setVelocityY(0);}
+        gameState.player.setVelocityX(gameState.information.velocity[3] * gameState.playerSpeed);
+        gameState.player.setVelocityY(gameState.information.velocity[0]);}
       };
 
       gameState.playerMove.triMoveLeft = triMoveLeft;
   
       function triMoveUp() {
         if(!gameState.playerMove.active){
-        gameState.player.flipX = false;
         gameState.player.play('triMoveUp');
-        gameState.player.setVelocityX(0);
-        gameState.player.setVelocityY(-150 * gameState.playerSpeed);}
+        gameState.player.setVelocityX(gameState.information.velocity[0]);
+        gameState.player.setVelocityY(gameState.information.velocity[3] * gameState.playerSpeed);}
       };
 
       gameState.playerMove.triMoveUp = triMoveUp;
   
       function triMoveDown() {
         if(!gameState.playerMove.active){
-        gameState.player.flipX = false;
         gameState.player.play('triMoveDown');
-        gameState.player.setVelocityX(0);
-        gameState.player.setVelocityY(150 * gameState.playerSpeed);}
+        gameState.player.setVelocityX(gameState.information.velocity[0]);
+        gameState.player.setVelocityY(gameState.information.velocity[4] * gameState.playerSpeed);}
       };
 
       gameState.playerMove.triMoveDown = triMoveDown;
 
       function triMoveUpRight(){
         if(!gameState.playerMove.active){
-          gameState.player.flipX = false;
           gameState.player.play('triMoveUpRight');
-          gameState.player.setVelocityX(100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(-100 * gameState.playerSpeed);}
+          gameState.player.setVelocityX(gameState.information.velocity[2] * gameState.playerSpeed);
+          gameState.player.setVelocityY(gameState.information.velocity[1] * gameState.playerSpeed);}
       };
 
       gameState.playerMove.triMoveUpRight = triMoveUpRight;
 
       function triMoveUpLeft(){
         if(!gameState.playerMove.active){
-          gameState.player.flipX = false;
           gameState.player.play('triMoveUpLeft');
-          gameState.player.setVelocityX(-100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(-100 * gameState.playerSpeed);}
+          gameState.player.setVelocityX(gameState.information.velocity[1] * gameState.playerSpeed);
+          gameState.player.setVelocityY(gameState.information.velocity[1] * gameState.playerSpeed);}
       };
 
       gameState.playerMove.triMoveUpLeft = triMoveUpLeft;
 
       function triMoveDownRight(){
         if(!gameState.playerMove.active){
-          gameState.player.flipX = false;
           gameState.player.play('triMoveDownRight');
-          gameState.player.setVelocityX(100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(100 * gameState.playerSpeed);}
+          gameState.player.setVelocityX(gameState.information.velocity[2] * gameState.playerSpeed);
+          gameState.player.setVelocityY(gameState.information.velocity[2] * gameState.playerSpeed);}
       };
       
       gameState.playerMove.triMoveDownRight = triMoveDownRight;
 
       function triMoveDownLeft(){
         if(!gameState.playerMove.active){
-          gameState.player.flipX = false;
           gameState.player.play('triMoveDownLeft');
-          gameState.player.setVelocityX(-100 * gameState.playerSpeed);
-          gameState.player.setVelocityY(100 * gameState.playerSpeed);}
+          gameState.player.setVelocityX(gameState.information.velocity[1] * gameState.playerSpeed);
+          gameState.player.setVelocityY(gameState.information.velocity[2] * gameState.playerSpeed);}
       };
 
       gameState.playerMove.triMoveDownLeft = triMoveDownLeft;
       
       function triStop(){
           if(!gameState.playerMove.active){
-          gameState.player.setVelocityX(0);
-          gameState.player.setVelocityY(0);
+          gameState.player.setVelocityX(gameState.information.velocity[0]);
+          gameState.player.setVelocityY(gameState.information.velocity[0]);
         }
       };
 
@@ -450,21 +443,20 @@ if(enemyXCoord <= 100){
         if(!gameState.playerMove.active){
           gameState.playerMove.active = true;
           gameState.playerMove.activeHit = true;
-          gameState.player.flipX = false;
           gameState.player.play('triPunch', true);
-          gameState.player.setVelocityX(0);
-          gameState.player.setVelocityY(0);
-          setTimeout(()=>{
-            gameState.player.setCircle(20, 125, 80)}, 50)
-          setTimeout(()=>{
-            gameState.player.setCircle(20, 150, 80)}, 150);
-          setTimeout(()=>{
-           gameState.player.setCircle(20, 185, 80)}, 175);
-          setTimeout(()=>{
-            gameState.player.setCircle(46, 46, 100)}, 250);
-          setTimeout(() => {
+          gameState.player.setVelocityX(gameState.information.velocity[0]);
+          gameState.player.setVelocityY(gameState.information.velocity[0]);
+          timedEvent = game.time.delayedCall(50, ()=>{
+            gameState.player.setCircle(20, 125, 80)}, [], game);
+          timedEvent = game.time.delayedCall(150, ()=>{
+            gameState.player.setCircle(20, 150, 80)},[], game);
+          timedEvent = game.time.delayedCall(175, ()=>{
+           gameState.player.setCircle(20, 185, 80)},[], game);
+          timedEvent = game.time.delayedCall(250, ()=>{
+            gameState.player.setCircle(46, 46, 100)},[], game);
+          timedEvent = game.time.delayedCall(400, () => {
             triHold()
-          }, 400);}
+          }, [], game);}
       };
 
       gameState.playerMove.triPunch = triPunch;
@@ -473,21 +465,21 @@ if(enemyXCoord <= 100){
         if(!gameState.playerMove.active){
             gameState.player.flipX = false;
             gameState.player.play('triKick', true);
-            gameState.player.setVelocityX(0);
-            gameState.player.setVelocityY(0);
+            gameState.player.setVelocityX(gameState.information.velocity[0]);
+            gameState.player.setVelocityY(gameState.information.velocity[0]);
             gameState.playerMove.active = true;
             gameState.playerMove.activeHit = true;
             gameState.playerMove.activeHit = true;
-            setTimeout(()=>{
-              gameState.player.setCircle(20, 150, 160)}, 150)
-            setTimeout(()=>{
-              gameState.player.setCircle(20, 175, 160)}, 200);
-            setTimeout(()=>{
-             gameState.player.setCircle(20, 200, 160)}, 250);
-            setTimeout(()=>{
-              gameState.player.setCircle(46, 46, 100)}, 300);
-             setTimeout(() => {
-              triHold()}, 700);}
+            timedEvent = game.time.delayedCall(150, ()=>{
+              gameState.player.setCircle(20, 150, 160)},[], game)
+            timedEvent = game.time.delayedCall(200, ()=>{
+              gameState.player.setCircle(20, 175, 160)},[], game);
+            timedEvent = game.time.delayedCall(250, ()=>{
+             gameState.player.setCircle(20, 200, 160)},[], game);
+            timedEvent = game.time.delayedCall(300, ()=>{
+              gameState.player.setCircle(46, 46, 100)},[], game);
+            timedEvent = game.time.delayedCall(700, () => {
+              triHold()}, [], game);}
         };
 
         gameState.playerMove.triKick = triKick;
@@ -501,7 +493,7 @@ if(enemyXCoord <= 100){
       gameState.playerMove.triHold = triHold;
 
       function squareMove(){
-        gameState.computerSprite.setVelocityX(-25 * gameState.computerSpeed);
+        gameState.computerSprite.setVelocityX(gameState.information.velocity[5] * gameState.computerSpeed);
         gameState.computerSprite.play('squareLeft', true);
       }
 
