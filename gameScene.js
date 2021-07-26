@@ -48,7 +48,7 @@ create(){
     gameState.player.setCollideWorldBounds(true);
     gameState.player.body.collideWorldBounds = true;
     gameState.music = this.sound.add('theme');
-    //gameState.music.play();
+    gameState.music.play();
     gameState.playerMove.active = false;
     gameState.playerMove.activeHit = false;
     game = this;
@@ -65,6 +65,13 @@ create(){
     gameState.computerSprite.setCircle(8, 7, 7);
     gameState.computerSprite.active = true;
     
+    gameState.opponents = this.physics.add.group({
+      key: 'squareFighter',
+      quantity: 1,
+      collideWorldBounds: true,
+      velocityX: gameState.information.velocity[5] * gameState.computerSpeed,
+
+     })
 
     gameState.playerInformation = {
       name: 'TriFighter',
