@@ -68,11 +68,11 @@ create(){
     gameState.computerSprite.body.collideWorldBounds = true;
     gameState.computerSprite.body.onWorldBounds = true;
     gameState.computerSprite.setCircle(9, 8, 7);
+  };
     gameState.computerSprite.active = true;
     gameState.computerInformation.health = 4;
     gameState.computerSprite.activeHit = false;
     gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
-    };
     
     
     gameState.opponents = this.physics.add.group({
@@ -99,39 +99,40 @@ create(){
       fill: '#000000',
       padding: {x: 6, y: 7}
     }
-  
+
     gameState.playerHealthBar = this.add.text(45, 45, `HP: ${gameState.playerInformation.health}`, style);
     gameState.computerHealthBar = this.add.text(800, 45, `HP: ${gameState.computerInformation.health}`, style);
     gameState.triAnglesTotal = this.add.text(45, 90, `triAngles: ${gameState.triAngles}`, style);
     gameState.baseHealthBar = this.add.text(45, 135, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
 
-    createSquare();
+    //createSquare();
     createOpponent();
     
     this.physics.add.collider(gameState.opponents, base, function(){
       if(gameState.computerInformation.active && !gameState.opponents.dead){
         gameState.playerInformation.baseHealth -=1
         gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
-        squareDead();
-    }});
+        squareDead();  
+    }}
+  );
 
-    this.physics.add.collider(gameState.computerSprite, base, function(){
+    /*this.physics.add.collider(gameState.computerSprite, base, function(){
       if(gameState.computerInformation.active){
         gameState.playerInformation.baseHealth -=1
         gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
         squareDead();
-    }});
+    }});*/
 
-    this.physics.add.collider(gameState.player, gameState.opponents, function(body){
+    this.physics.add.collider(gameState.player, gameState.opponents, function(){
       if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit && gameState.computerInformation.health > 0){
         triWasHit();
       }
    
     if(gameState.computerInformation.health > 0 && gameState.playerMove.activeHit){
-      squareHit(body);    
+      squareHit();    
     };
       if(gameState.computerInformation.health == 0 && gameState.playerMove.activeHit){
-        squareDead(body);
+        squareDead();
         
       }
       if(!gameState.computerSprite.active){
@@ -142,7 +143,7 @@ create(){
 
     })
 
-    this.physics.add.collider(gameState.player, gameState.computerSprite, function(){
+    /*this.physics.add.collider(gameState.player, gameState.computerSprite, function(){
 
       if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit && gameState.computerInformation.health > 0){
         triWasHit();
@@ -161,7 +162,7 @@ create(){
         //createSquare();
       }  
     }
-    );
+    );*/
 
     this.physics.add.collider(gameState.player, gameState.opponents, function(){
 
@@ -187,11 +188,28 @@ function createOpponent(){
     };
     let assignedCoord = generateComputerEntryCoord();
   gameState.opponents
-  .create(assignedCoord.x, assignedCoord.y, 'squareFighter')
+  /*.createFromConfig({
+    key:'squareFighter',
+    frames: 3,
+    collideWorldBounds: true,
+    velocityX: gameState.information.velocity[5] * gameState.computerSpeed,
+    setXY:{
+      x: assignedCoord.x,
+      y: assignedCoord.y
+    },
+    setScale:{
+      x:2,
+      y:2
+    }
+  });*/
+  .create(assignedCoord.x, assignedCoord.y, 'squareFighter', 3)
   .setScale(2)
   .setCircle(8,7,7)
   .play('squareLeft');
+
   gameState.computerInformation.active = true;
+  gameState.computerInformation.health = 4;
+  gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
   return;
 }
 
@@ -333,8 +351,8 @@ function onWorldBounds(){
     })
 
   
-  function squareHit(body){
-      gameState.computerSprite.play('squareHit', true);
+  function squareHit(){
+      gameState.opponents.playAnimation('squareHit', true);
       gameState.computerInformation.health --
       gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
       gameState.computerSprite.activeHit = true;
@@ -342,12 +360,11 @@ function onWorldBounds(){
 
   gameState.computer.squareHit = squareHit;
 
-  function squareDead(body){
-    const square = this.body;
+  function squareDead(){
     if(gameState.computerSprite.active){
-    gameState.computerSprite.play('squareDead', true);
+    //gameState.computerSprite.play('squareDead', true);
     gameState.opponents.playAnimation('squareDead', true);
-    gameState.computerSprite.setVelocityX(gameState.information.velocity[0]);
+    //gameState.computerSprite.setVelocityX(gameState.information.velocity[0]);
     gameState.computerInformation.health = 0;
     gameState.computerInformation.active = false;
     gameState.opponents.killed++
@@ -358,7 +375,7 @@ function onWorldBounds(){
     //delete gameState.numCoordinates[`x${assignedCoord.x}y${assignedCoord.y}`];
     timedEvent = game.time.delayedCall(10000, ()=>{
       //gameState.computerSprite.disableBody().setActive(false).setVisible(false);
-      gameState.computerSprite.destroy();
+      //gameState.computerSprite.destroy();
       gameState.opponents.destroy();
     }, [], game);
     }
@@ -384,7 +401,8 @@ function onWorldBounds(){
     gameState.triAngles +=1 ;
     gameState.triAnglesTotal.text = `triAngles: ${gameState.triAngles}`;
     //gameState.computerSprite.disableBody().setActive(false).setVisible(false);
-    gameState.computerSprite.destroy();
+    gameState.computerSprite.active = true;
+    //gameState.computerSprite.destroy();
   }
 
   gameState.playerMove.triPickUpAngles = triPickUpAngles;
@@ -432,10 +450,13 @@ if(rightArrow && upArrow){
     triMoveDown();
 } else {triStop();}
 
+/*
 if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
   squareMove();
+}else{
+  return;
 }
-
+*/
 
 
 
