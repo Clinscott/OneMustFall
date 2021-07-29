@@ -136,7 +136,7 @@ create(){
         
       }
       if(!gameState.computerSprite.active){
-        triPickUpAngles();
+        triPickUpAngles(square);
         gameState.opponents.createOpponent();
         //createSquare();
       }  
@@ -376,7 +376,7 @@ function onWorldBounds(){
     timedEvent = game.time.delayedCall(10000, ()=>{
       //gameState.computerSprite.disableBody().setActive(false).setVisible(false);
       //gameState.computerSprite.destroy();
-      gameState.opponents.destroy();
+      gameState.opponents.remove(gameState.opponents.getLast(true), true);
     }, [], game);
     }
   };
@@ -397,12 +397,12 @@ function onWorldBounds(){
 
   gameState.playerMove.triWasHit = triWasHit;
 
-  function triPickUpAngles(){
+  function triPickUpAngles(square){
     gameState.triAngles +=1 ;
     gameState.triAnglesTotal.text = `triAngles: ${gameState.triAngles}`;
     //gameState.computerSprite.disableBody().setActive(false).setVisible(false);
     gameState.computerSprite.active = true;
-    //gameState.computerSprite.destroy();
+    square.destroy();
   }
 
   gameState.playerMove.triPickUpAngles = triPickUpAngles;
@@ -450,13 +450,9 @@ if(rightArrow && upArrow){
     triMoveDown();
 } else {triStop();}
 
-/*
 if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
   squareMove();
-}else{
-  return;
 }
-*/
 
 
 
@@ -608,8 +604,8 @@ if(enemyXCoord <= 100){
       gameState.playerMove.triHold = triHold;
 
       function squareMove(){
-        gameState.computerSprite.setVelocityX(gameState.information.velocity[5] * gameState.computerSpeed);
-        gameState.computerSprite.play('squareLeft', true);
+        gameState.opponents.setVelocityX(gameState.information.velocity[5] * gameState.computerSpeed);
+        gameState.opponents.playAnimation('squareLeft', true);
         gameState.computerInformation.active = true;
       }
 
