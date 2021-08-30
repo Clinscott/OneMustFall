@@ -1,6 +1,8 @@
 const Phaser = require("phaser");
+import {gameState} from "./game.js"
 
-let gameState = {
+/*
+gameState = {
     player: {},
     playerSpeed: 2,
     computer: {},
@@ -19,12 +21,16 @@ let gameState = {
     waveCount: 0,
     opponents: [],
     baseHealthBar: {},
-    numCoordinates: {}
+    numCoordinates: {},
+    timer: 60
   };
+*/
 
 let timedEvent;
 let randomCoord;
 let game;
+
+
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -34,19 +40,20 @@ class GameScene extends Phaser.Scene {
     }
 
 preload(){
-    this.load.spritesheet('triFighter', './assets/triFighter/triFighterFullMoveSet.png', { frameWidth: 256, frameHeight: 256, endFrame: 16});
-    this.load.spritesheet('fight', './assets/fight.png', { frameWidth: 256, frameHeight: 256});
-    this.load.audio('theme', './assets/music/omfTheme.mp3');
-    this.load.spritesheet('squareFighter', './assets/squareFighter/squareFighterMoves.png', {frameWidth: 32, frameHeight: 32, endFrame:10});
-    this.load.spritesheet('triBase', './assets/base/triFighterBase.png', {frameWidth: 32, frameHeight: 32, endFrame:3});
+    
 }
 
 create(){
 
   const base = this.physics.add.sprite(25, 450, 'triBase').setScale(12).setImmovable();
- 
+  const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]];
+  const triComMap = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
+  const triComTiles = triComMap.addTilesetImage('triComs');
+  const triComLayerBottom = triComMap.createLayer(0, triComTiles, 0, 644).setScale(4);
+  const triComLayerTop = triComMap.createLayer(0, triComTiles, 0, 0).setScale(4);
+
     gameState.information = this.add.sprite(640, 64, 'fight').setScale(.5);
-    gameState.player = this.physics.add.sprite(256, 600, 'triFighter').setScale(.5);
+    gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(.5);
     this.physics.world.setBounds(64, 256, 1152, 384);
     gameState.player.setCollideWorldBounds(true);
     gameState.player.body.collideWorldBounds = true;
@@ -60,6 +67,7 @@ create(){
 
     gameState.player.setCircle(46, 46, 100);
 
+    
     randomCoord = assignComputerCoord();
     
     function createSquare(){
@@ -72,7 +80,6 @@ create(){
     gameState.computerSprite.active = true;
     gameState.computerInformation.health = 4;
     gameState.computerSprite.activeHit = false;
-    gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
     
     
     gameState.opponents = this.physics.add.group({
@@ -81,8 +88,6 @@ create(){
     });
 
     gameState.triAngles = this.physics.add.group();
-    
-
 
     gameState.playerInformation = {
       name: 'TriFighter',
@@ -110,22 +115,27 @@ create(){
     gameState.computerHealthBar = this.add.text(800, 45, `HP: ${gameState.computerInformation.health}`, style);
     gameState.triAnglesHealthBar = this.add.text(45, 90, `triAngles: ${gameState.triAnglesInformation.total}`, style);
     gameState.baseHealthBar = this.add.text(45, 135, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
-
-    //createSquare();
-    createOpponent();
+    gameState.timerBar = game.add.text(640, 200, `${gameState.timer}`, style);
+    //gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
     
-    this.physics.add.collider(gameState.opponents, base, function(base, enemy){
-        gameState.playerInformation.baseHealth -=1
-        gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
-        squareDead(enemy);  
+
+    const fightClock = this.time.addEvent({
+      delay: 1000,
+      callback: fightCounter,
+      callbackScope: this,
+      repeat: 59
+    });
+    //createOpponent();
+    
+    this.physics.add.collider(gameState.opponents, base, function(triBase, enemy){
+        squareDead(enemy);
+        baseHit(triBase);
+
     });
 
-    /*this.physics.add.collider(gameState.computerSprite, base, function(){
-      if(gameState.computerInformation.active){
-        gameState.playerInformation.baseHealth -=1
-        gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
-        squareDead();
-    }});*/
+    this.physics.add.collider(gameState.player, base, function(){
+    });
+
 
     this.physics.add.collider(gameState.player, gameState.opponents, function(hero, enemy){
       if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit){
@@ -144,29 +154,7 @@ create(){
     this.physics.add.collider(gameState.player, gameState.triAngles, function(hero, enemy){
         triPickUpAngles(enemy);
         gameState.opponents.createOpponent();
-        //createSquare();
     })
-
-    /*this.physics.add.collider(gameState.player, gameState.computerSprite, function(){
-
-      if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit && gameState.computerInformation.health > 0){
-        triWasHit();
-      }
-   
-    if(gameState.computerInformation.health > 0 && gameState.playerMove.activeHit){
-      squareHit();    
-    };
-      if(gameState.computerInformation.health == 0 && gameState.playerMove.activeHit){
-        squareDead();
-        
-      }
-      if(!gameState.computerSprite.active){
-        triPickUpAngles();
-        gameState.opponents.createOpponent();
-        //createSquare();
-      }  
-    }
-    );*/
 
 const triXCoord = gameState.player.x;
 const triYCoord = gameState.player.y;
@@ -181,20 +169,6 @@ function createOpponent(){
     let assignedCoord = generateComputerEntryCoord();
 
   gameState.opponents
-  /*.createFromConfig({
-    key:'squareFighter',
-    frames: 3,
-    collideWorldBounds: true,
-    velocityX: gameState.information.velocity[5] * gameState.computerSpeed,
-    setXY:{
-      x: assignedCoord.x,
-      y: assignedCoord.y
-    },
-    setScale:{
-      x:2,
-      y:2
-    }
-  });*/
   .create(assignedCoord.x, assignedCoord.y, 'squareFighter', 3)
   .setScale(2)
   .setCircle(8,7,7)
@@ -237,117 +211,6 @@ function onWorldBounds(){
       return assignedCoord;
     }
 
-    this.anims.create({
-        key: 'triMoveUp',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [1, 0]}),
-        frameRate:8,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveRight',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [2, 0]}),
-        frameRate: 8,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveDown',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [3, 0]}),
-        frameRate: 8,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveLeft',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [4, 0]}),
-        frameRate: 8,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveUpRight',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [15, 0]}),
-        frameRate: 10,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveUpLeft',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [16, 0]}),
-        frameRate: 10,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveDownRight',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [14, 0]}),
-        frameRate: 10,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triMoveDownLeft',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [13, 0]}),
-        frameRate: 10,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key: 'triPunch',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames: [10, 11, 12, 12, 11, 10, 0]}),
-        frameRate: 15,
-        repeat: 0
-    });
-
-    this.anims.create({
-        key:'triKick',
-        frames: this.anims.generateFrameNumbers('triFighter', {frames:[7, 8, 9, 9, 8, 7, 0]}),
-        frameRate: 10,
-        repeat: 0
-    });
-
-    this.anims.create({
-      key:'squareRight',
-      frames: this.anims.generateFrameNumbers('squareFighter', {frames:[1, 0]}),
-      frameRate: 10,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key:'squareDown',
-      frames: this.anims.generateFrameNumbers('squareFighter', {frames:[2, 0]}),
-      frameRate: 10,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key:'squareLeft',
-      frames: this.anims.generateFrameNumbers('squareFighter', {frames:[3]}),
-      frameRate: 10,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key:'squareUp',
-      frames: this.anims.generateFrameNumbers('squareFighter', {frames:[4, 0]}),
-      frameRate: 10,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key:'squareHit',
-      frames: this.anims.generateFrameNumbers('squareFighter', {frames:[5, 6, 7, 6, 5, 0]}),
-      frameRate: 10,
-      repeat: 0
-    });
-
-    this.anims.create({
-      key:'squareDead',
-      frames: this.anims.generateFrameNumbers('squareFighter', {frames:[5, 6, 7, 6, 7, 8, 9, 10]}),
-      frameRate: 10,
-      repeat: 0
-    })
 
   
   function squareHit(enemy){
@@ -360,10 +223,8 @@ function onWorldBounds(){
   gameState.computer.squareHit = squareHit;
 
   function squareDead(enemy){
-    //gameState.computerSprite.play('squareDead', true);
     enemy.play('squareDead', true);
     enemy.disableBody()
-    //gameState.computerSprite.setVelocityX(gameState.information.velocity[0]);
     gameState.computerInformation.health = 0;
     gameState.computerInformation.active = false;
     gameState.opponents.killed++
@@ -374,10 +235,7 @@ function onWorldBounds(){
       enemy.setActive(false).setVisible(false);
       gameState.computerInformation.health = 4;
     }, [], game);
-    //delete gameState.numCoordinates[`x${assignedCoord.x}y${assignedCoord.y}`];
     timedEvent = game.time.delayedCall(10000, ()=>{
-      //gameState.computerSprite.disableBody().setActive(false).setVisible(false);
-      //gameState.computerSprite.destroy();
       enemy.destroy(gameState.opponents.getLast(true), true);
       gameState.triAngles.remove(gameState.triAngles.getLast(true), true);
     }, [], game);
@@ -402,12 +260,22 @@ function onWorldBounds(){
   function triPickUpAngles(enemy){
     gameState.triAnglesInformation.total +=1 ;
     gameState.triAnglesHealthBar.text = `triAngles: ${gameState.triAnglesInformation.total}`;
-    //gameState.computerSprite.disableBody().setActive(false).setVisible(false);
     gameState.computerSprite.active = true;
     enemy.destroy();
   }
 
   gameState.playerMove.triPickUpAngles = triPickUpAngles;
+
+  function baseHit(triBase){
+    triBase.play('baseHit', true);
+    gameState.playerInformation.baseHealth -=1
+    gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
+  }
+
+  function fightCounter(){
+    gameState.timer--
+    gameState.timerBar.text = `${gameState.timer}`;
+  };
 
  
 
@@ -418,7 +286,7 @@ update(){
   
 // Arrow keys that will move tri in 4 directions
 const cursors = this.input.keyboard.createCursorKeys();
-// Add variables that store if a specific arrow key is being pressed
+//Variables that store if a specific arrow key is being pressed
 const rightArrow = cursors.right.isDown;
 const leftArrow = cursors.left.isDown;
 const upArrow = cursors.up.isDown;
@@ -427,6 +295,7 @@ const downArrow = cursors.down.isDown;
 const aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown;
 const sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown;
 
+if(gameState.timer > 0){
 if(aKey){
     triPunch();
 }
@@ -451,26 +320,26 @@ if(rightArrow && upArrow){
 }else if(downArrow){
     triMoveDown();
 } else {triStop();}
+}
 
 
 if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
   squareMove();
 }
 
+if(gameState.timer === 0){
+  triStop();
+  this.physics.pause();
+  this.anims.pauseAll();
+};
 
-
-/*
-const enemyXCoord = gameState.computerSprite.x;
-const enemyYCoord = gameState.computerSprite.y;
-
-   
-if(enemyXCoord <= 100){
-  gameState.playerInformation.baseHealth -=1
-  gameState.baseHealthBar.text = `BASE HP: ${gameState.playerInformation.baseHealth}`;
-  gameState.computerInformation.health = 0;
-}*/
-
-
+if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseHealth === 0){
+  this.physics.pause();
+  this.anims.pauseAll();
+  this.scene.stop('GameScene');
+  //gameState.timer = 60;
+  this.scene.start('EndScene');
+}
 
     // Helper functions to move tri in 8 directions
     function triMoveRight() {
@@ -548,6 +417,7 @@ if(enemyXCoord <= 100){
           if(!gameState.playerMove.active){
           gameState.player.setVelocityX(gameState.information.velocity[0]);
           gameState.player.setVelocityY(gameState.information.velocity[0]);
+          gameState.player.play('triStop');
         }
       };
 
@@ -613,12 +483,6 @@ if(enemyXCoord <= 100){
       }
 
       gameState.computer.squareMove = squareMove;
-      
-     
-     
-      
-      //function squareStop(){gameState.computerSprite.anims.play('squareDead', true);}
-
 
     };
 };
