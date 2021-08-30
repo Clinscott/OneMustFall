@@ -9,13 +9,19 @@ class PreloadScene extends Phaser.Scene {
     }
 
 preload(){
+/*
+description:A loading bar page that loads all assets prior to game start.
+credit: Scott Westover at https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
+*/
+
     let progressBar = this.add.graphics();
             let progressBox = this.add.graphics();
-            progressBox.fillStyle(0x222222, 0.8);
-            progressBox.fillRect(240, 270, 320, 50);
-            
             let width = this.cameras.main.width;
             let height = this.cameras.main.height;
+            progressBox.fillStyle(0x222222, 0.8);
+            progressBox.fillRect(width/2-170, height/2-75, 320, 50);
+            
+          
             let loadingText = this.make.text({
                 x: width / 2,
                 y: height / 2 - 50,
@@ -53,7 +59,7 @@ preload(){
                 percentText.setText(parseInt(value * 100) + '%');
                 progressBar.clear();
                 progressBar.fillStyle(0xffffff, 1);
-                progressBar.fillRect(250, 280, 300 * value, 30);
+                progressBar.fillRect(width/2-160, height/2-65, 300 * value, 30);
             });
             
             this.load.on('fileprogress', function (file) {
@@ -87,6 +93,12 @@ preload(){
 };
 
 create(){
+
+    /*
+    description: Animations for the game
+    credit: codecademy's PhaserJS course. Solid learning site. 
+    */
+
     this.anims.create({
         key: 'triStop',
         frames: this.anims.generateFrameNumbers('triFighter', {frames: [0]}),
@@ -215,19 +227,16 @@ create(){
 
       this.anims.create({
         key: 'triAngle',
-        frames: this.anims.generateFrameNumbers('genTriComs', {frames: [5, 6]}),
+        frames: this.anims.generateFrameNumbers('genTriComs', {frames: [5, 6, 5]}),
         frameRate:8,
-        repeat: -1
+        repeat: 10
     });
     
     this.anims.create({
         key: 'generalGas',
-        frames: this.anims.generateFrameNumbers('genTriComs', {
-            start: 3, 
-            end: 4
-        }),
+        frames: this.anims.generateFrameNumbers('genTriComs', {frames: [3, 4, 3]}),
         frameRate: 8,
-        repeat: -1
+        repeat: 10
     });
 
 };

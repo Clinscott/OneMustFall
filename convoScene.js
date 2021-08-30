@@ -1,6 +1,9 @@
 const Phaser = require('phaser');
 import {gameState} from "./game.js"
 
+let timedEvent;
+const game = this;
+
 class ConvoScene extends Phaser.Scene {
     constructor() {
       super({
@@ -23,24 +26,35 @@ create(){
     
     
       gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(.5);
-      this.physics.world.setBounds(64, 256, 1152, 384);
-      gameState.player.setCollideWorldBounds(true);
+      //this.physics.world.setBounds(64, 256, 1152, 384);
+      //gameState.player.setCollideWorldBounds(true);
       gameState.music = this.sound.add('theme');
       //gameState.music.play();
-      //renderCharacter(this, 'triAngle');
-      //initializePage(this);
-      //const firstPage = getPage(1);
-      //displayPage(this, firstPage);
+      renderTriCharacter(this, 'triAngle');
+      renderAdmin(this, 'generalGas')
+      initializePage(this);
+      const firstPage = getPage(1);
+      displayPage(this, firstPage);
 
-      function renderCharacter(scene, key){
-        if(gameState.character){
-          gameState.character.destroy();
+      function renderTriCharacter(scene, key){
+        if(gameState.triCharacter){
+          gameState.triCharacter.destroy();
         }
-        gameState.character = scene.add.sprite(270, 340);
-        gameState.character.setOrigin(.5, 1);
-        gameState.character.setScale(.7);
-        gameState.character.play(key)
+        gameState.triCharacter = scene.add.sprite(1216, 708);
+        //gameState.character.setOrigin(.5, 1);
+        gameState.triCharacter.setScale(4);
+        gameState.triCharacter.play(key);
       }
+
+      function renderAdmin(scene, key){
+        if(gameState.admin){
+          gameState.admin.destroy();
+        }
+        gameState.admin = scene.add.sprite(64, 708);
+        gameState.admin.setScale(4);
+        gameState.admin.play(key);
+      };
+
       function initializePage(scene) {
         // create options list and background
         // and saves them into gameState
@@ -74,13 +88,14 @@ create(){
       }
 
       function displayPage(scene, page) {
-        const narrativeStyle = { fill: '#ffffff', fontStyle: 'italic', align: 'center', wordWrap: { width: 340 }, lineSpacing: 8};
+        const narrativeStyle = { fill: '#000000', fontStyle: 'italic', align: 'center', wordWrap: { width: 340 }, lineSpacing: 8};
         
         // display general page character
         // & narrative here:
-        renderCharacter(scene, page.character);
+        renderTriCharacter(scene, page.character);
+        
       
-        gameState.narrative = scene.add.text(65, 380, page.narrative, narrativeStyle);
+        gameState.narrative = scene.add.text(1050 - (page.narrative.length * 4), 680, page.narrative, narrativeStyle);
       
         // for-loop creates different options
         // need the index i for spacing the boxes
@@ -97,7 +112,7 @@ create(){
       
           // add in the option text
           const baseX = 40 + i * 130;
-          const optionText = scene.add.text(baseX, 480, option.option, { fontSize:14, fill: '#b39c0e', align: 'center', wordWrap: {width: 110}});
+          const optionText = scene.add.text(baseX, 480, option.option, { fontSize:14, fill: '#000000', align: 'center', wordWrap: {width: 110}});
           const optionTextBounds = optionText.getBounds()
       
           // centering each option text
@@ -111,17 +126,20 @@ create(){
           optionBox.on('pointerup', function(){
            const newPage = this.option.nextPage;
            if (newPage !== undefined){
-             destroyPage();
-             displayPage(scene, fetchPage(newPage));
+             renderAdmin(scene, page.admin);
+             timedEvent = scene.time.delayedCall(500, ()=>{
+              destroyPage();
+              displayPage(scene, getPage(newPage));
+            }, [], scene);
            }
           }, { option });
           optionBox.on('pointerover', function (){
             this.optionBox.setStrokeStyle(2, 0xffe014, 1);
-            this.optionText.setColor('#ffe014');
+            this.optionText.setColor('#000000');
           }, { optionBox, optionText });
               optionBox.on('pointerout', function (){
             this.optionBox.setStrokeStyle(1, 0xb38c03, 1);
-            this.optionText.setColor('#b39c0e');
+            this.optionText.setColor('#000000');
           }, { optionBox, optionText });
       
           gameState.options.push({
@@ -132,12 +150,13 @@ create(){
         }
       }
 
-      function getPage(Page){
+      function getPage(page){
       const convo = [
           {
           character: 'triAngle',
           page: 1,
-          Narrative: 'Yo wassup',
+          narrative: 'Yo wassup',
+          admin: 'generalGas',
           options: [
           {option: 'You must save the base TriAngle', nextPage:2},
           {option: 'Help us TriAngle, you are our only hope', nextPage:2}
@@ -146,7 +165,8 @@ create(){
           {
           character: 'triAngle',
           page: 2 ,
-          Narrative: 'Why should I do that?',
+          narrative: 'Why should I do that?',
+          admin: 'generalGas',
           options: [
           {option: 'Because we have given unto you your life, and we need you to aid us now!', nextPage:3},
           {option: 'Please TriAngle, if you fail us, you too shall fall to the wrath of the One of Infinite Angles.', nextPage:4}
@@ -155,18 +175,20 @@ create(){
           {
           character: 'triAngle',
           page: 3,
-          Narrative: 'That seams like a very good reason, but really, what\'s in it for me?',
+          narrative: 'That seams like a very good reason, but really, what\'s in it for me?',
+          admin: 'generalGas',
           options: [
-          {option: 'The One of Infinite Angles searches for all our destruction, yours included. This base is the last hope.', nextPage:5}
+          {option: 'The One of Infinite Angles searches for all our destruction, yours included. This base is the last hope.', nextPage:4}
           ]
           },
           {
           character: 'triAngle',
-          page: 5,
-          Narrative: 'That seams bad.',
+          page: 4,
+          narrative: 'That seams bad.',
+          admin: 'generalGas',
           options: [
-          {option: 'It is indeed Dire! Will you save us?', nextPage:6},
-          {option: 'We hope that ', nextPage:bar}
+          {option: 'It is indeed Dire! Will you save us?', nextPage:5},
+          {option: 'Once again TriAngle, help us, for you are our only hope', nextPage:5}
           ]
           },
       ];
