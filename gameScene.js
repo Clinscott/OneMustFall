@@ -1,31 +1,6 @@
 const Phaser = require("phaser");
 import {gameState} from "./game.js"
 
-/*
-gameState = {
-    player: {},
-    playerSpeed: 2,
-    computer: {},
-    computerSpeed: 3,
-    computerSprite: {},
-    angleSprite: {},
-    playerHealthBar: {},
-    computerHealthBar: {},
-    triAngles: {},
-    triAnglesInformation: {},
-    information: {},
-    playerMove: {},
-    playerInformation: {},
-    computerInformation: {},
-    computerMove: {},
-    waveCount: 0,
-    opponents: [],
-    baseHealthBar: {},
-    numCoordinates: {},
-    timer: 60
-  };
-*/
-
 let timedEvent;
 let randomCoord;
 let game;
@@ -51,6 +26,12 @@ create(){
   const triComTiles = triComMap.addTilesetImage('triComs');
   const triComLayerBottom = triComMap.createLayer(0, triComTiles, 0, 644).setScale(4);
   const triComLayerTop = triComMap.createLayer(0, triComTiles, 0, 0).setScale(4);
+
+  /*
+  description: This insanity of code before you is the main game engine for my first game, triFighter.
+  credit: Craig Linscott
+  link: https://github.com/clinscott
+  */
 
     gameState.information = this.add.sprite(640, 64, 'fight').setScale(.5);
     gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(.5);
@@ -284,6 +265,11 @@ function onWorldBounds(){
 
 update(){
   
+  /*
+  description: Initial movement arrows and animation functions.
+  credit: codecademy business outfitted bob game. 
+  link: https://www.codecademy.com/paths/create-video-games-with-phaser/tracks/game-dev-learn-javascript-basics/modules/game-dev-project-variables-and-conditionals/projects/business-outfitted-bob
+  */ 
 // Arrow keys that will move tri in 4 directions
 const cursors = this.input.keyboard.createCursorKeys();
 //Variables that store if a specific arrow key is being pressed

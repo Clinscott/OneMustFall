@@ -17,6 +17,12 @@ preload(){
 
 create(){
     const base = this.physics.add.sprite(25, 450, 'triBase').setScale(12).setImmovable();
+
+    /*
+    description: A tilemap for the top and bottom of the screen.
+    credit: Micheal Hadley over on medium was instrumental for this.
+    link: https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
+    */
     const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]]
     const triComMap = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
     const triComMapTwo = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
@@ -30,11 +36,19 @@ create(){
       //gameState.player.setCollideWorldBounds(true);
       gameState.music = this.sound.add('theme');
       //gameState.music.play();
+
+      /*
+      description: Conversation functions with animation display and choice.
+      credit: This mostly learned once again through codeCademy's PhaserJS course, through building thier narrative game. 
+      It has been modified for my game, but the credit is thiers. Learning to impliment it was fun though. 
+      */
+      
       renderTriCharacter(this, 'triAngle');
       renderAdmin(this, 'generalGas')
       initializePage(this);
       const firstPage = getPage(1);
       displayPage(this, firstPage);
+
 
       function renderTriCharacter(scene, key){
         if(gameState.triCharacter){
@@ -151,6 +165,13 @@ create(){
       }
 
       function getPage(page){
+
+        /*
+        description: Each object within the array is a snippet. This was my first snippet, each input is a seperate tabable
+                    event. Snippets rock, learn snippets. This comment is a snippet
+        credit: VSCode
+        link: https://code.visualstudio.com/docs/editor/userdefinedsnippets
+        */    
       const convo = [
           {
           character: 'triAngle',
