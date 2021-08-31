@@ -21,11 +21,12 @@ preload(){
 create(){
 
   const base = this.physics.add.sprite(25, 450, 'triBase').setScale(12).setImmovable();
-  const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]];
+  const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]]
   const triComMap = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
+  const triComMapTwo = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
   const triComTiles = triComMap.addTilesetImage('triComs');
   const triComLayerBottom = triComMap.createLayer(0, triComTiles, 0, 644).setScale(4);
-  const triComLayerTop = triComMap.createLayer(0, triComTiles, 0, 0).setScale(4);
+  const triComLayerTop = triComMapTwo.createLayer(0, triComTiles, 0, 0).setScale(4);
 
   /*
   description: This insanity of code before you is the main game engine for my first game, triFighter.
@@ -50,14 +51,17 @@ create(){
 
     
     randomCoord = assignComputerCoord();
-    
+
+    /*
     function createSquare(){
     gameState.computerSprite = game.physics.add.sprite(randomCoord.x, randomCoord.y, 'squareFighter').setScale(2);
     gameState.computerSprite.setCollideWorldBounds(true);
     gameState.computerSprite.body.collideWorldBounds = true;
     gameState.computerSprite.body.onWorldBounds = true;
     gameState.computerSprite.setCircle(9, 8, 7);
-  };
+    };
+    */
+
     gameState.computerSprite.active = true;
     gameState.computerInformation.health = 4;
     gameState.computerSprite.activeHit = false;
@@ -106,7 +110,8 @@ create(){
       callbackScope: this,
       repeat: 59
     });
-    //createOpponent();
+    createOpponent();
+    timedEvent = this.time.addEvent({delay:500, callback: createOpponent, callbackScope: this, loop:true});
     
     this.physics.add.collider(gameState.opponents, base, function(triBase, enemy){
         squareDead(enemy);
@@ -117,10 +122,11 @@ create(){
     this.physics.add.collider(gameState.player, base, function(){
     });
 
-
+    /* collider between the enemy sprite and the player */
     this.physics.add.collider(gameState.player, gameState.opponents, function(hero, enemy){
       if(!gameState.playerMove.activeHit && !gameState.computerSprite.activeHit){
         triWasHit();
+        squareHit(enemy);
       }
    
     if(gameState.computerInformation.health > 0 && gameState.playerMove.activeHit){
@@ -128,13 +134,13 @@ create(){
     };
       if(gameState.computerInformation.health <= 0 && gameState.computerSprite.activeHit){
         squareDead(enemy);
-        gameState.opponents.createOpponent();
+        //gameState.opponents.createOpponent();
       }
     })
 
     this.physics.add.collider(gameState.player, gameState.triAngles, function(hero, enemy){
         triPickUpAngles(enemy);
-        gameState.opponents.createOpponent();
+        //gameState.opponents.createOpponent();
     })
 
 const triXCoord = gameState.player.x;
@@ -196,9 +202,14 @@ function onWorldBounds(){
   
   function squareHit(enemy){
       enemy.play('squareHit', true);
+      enemy.setVelocityX(gameState.information.velocity[2] * gameState.computerSpeed);
+      timedEvent = game.time.delayedCall(100, ()=>{
+        enemy.setVelocityX(gameState.information.velocity[5] * gameState.computerSpeed)
+      }, game);
       gameState.computerInformation.health --
       gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
       gameState.computerSprite.activeHit = true;
+      
   }
 
   gameState.computer.squareHit = squareHit;
@@ -219,6 +230,7 @@ function onWorldBounds(){
     timedEvent = game.time.delayedCall(10000, ()=>{
       enemy.destroy(gameState.opponents.getLast(true), true);
       gameState.triAngles.remove(gameState.triAngles.getLast(true), true);
+      gameState.opponents.createOpponent();
     }, [], game);
   };
 
@@ -257,6 +269,14 @@ function onWorldBounds(){
     gameState.timer--
     gameState.timerBar.text = `${gameState.timer}`;
   };
+
+  function squareMove(enemy){
+    gameState.opponents.setVelocityX(gameState.information.velocity[5] * gameState.computerSpeed);
+    gameState.opponents.playAnimation('squareLeft', true);
+    gameState.computerInformation.active = true;
+  }
+
+  gameState.computer.squareMove = squareMove;
 
  
 
@@ -309,9 +329,9 @@ if(rightArrow && upArrow){
 }
 
 
-if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
-  squareMove();
-}
+/* if(gameState.computerInformation.health > 0 && !gameState.computerSprite.activeHit){
+  squareMove(enemy);
+} */
 
 if(gameState.timer === 0){
   triStop();
@@ -461,14 +481,6 @@ if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseH
       };
 
       gameState.playerMove.triHold = triHold;
-
-      function squareMove(){
-        gameState.opponents.setVelocityX(gameState.information.velocity[5] * gameState.computerSpeed);
-        gameState.opponents.playAnimation('squareLeft', true);
-        gameState.computerInformation.active = true;
-      }
-
-      gameState.computer.squareMove = squareMove;
 
     };
 };

@@ -13,12 +13,9 @@ preload(){
 };
 
 create(){
-  this.add.text(95, 250, 'Press T to Start Game', { fontSize: '30px', fill: '#000000' });
+  this.add.text(95, 250, 'Press T for Story Mode', { fontSize: '30px', fill: '#000000' });
   this.add.text(95, 350, 'Press M to enter Menu', {fontSize: '30px', fill: '#000000'});
 
-};
-
-update(){
   const tKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
   const mKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
   
@@ -32,6 +29,10 @@ update(){
     this.scene.stop('StartScene');
     this.scene.start('MenuScene');
   })
+};
+
+update(){
+
 };
 
 };

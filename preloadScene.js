@@ -11,7 +11,8 @@ class PreloadScene extends Phaser.Scene {
 preload(){
 /*
 description:A loading bar page that loads all assets prior to game start.
-credit: Scott Westover at https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
+credit: Scott Westover at gamedevacademy gets the credit here.
+link: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
 */
 
     let progressBar = this.add.graphics();
@@ -80,7 +81,7 @@ credit: Scott Westover at https://gamedevacademy.org/creating-a-preloading-scree
     
     const loadGame =()=>{
         this.scene.stop('PreloadScene');
-        this.scene.start('StartScene');
+        this.scene.start('MenuScene');
     };
 
     this.load.spritesheet('triFighter', './assets/triFighter/triFighterFullMoveSet.png', { frameWidth: 256, frameHeight: 256, endFrame: 16});
@@ -96,7 +97,8 @@ create(){
 
     /*
     description: Animations for the game
-    credit: codecademy's PhaserJS course. Solid learning site. 
+    credit: codecademy's PhaserJS course. Solid learning site. Everything I have learned there linked below.
+    link: https://github.com/Clinscott/CodeCademy
     */
 
     this.anims.create({

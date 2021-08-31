@@ -7,7 +7,7 @@ description: Thanks for taking a look at my game triFighter. It is a super fun a
             from phaser. Then when I jumped back into the course, after my stumbles led to complete road blocks, everything
             was so much clearer.
 credit: codecademy phaserjs course
-link: codecademy.com
+link: https://github.com/Clinscott/OneMustFall
 */  
 
 const Phaser = require("phaser");
@@ -52,8 +52,8 @@ const config = {
     pixelArt: true,
     scene: [
         PreloadScene,
+        MenuScene,
         StartScene,
-        MenuScene, 
         GameScene, 
         ConvoScene,
         EndScene],

@@ -2,7 +2,7 @@ const Phaser = require('phaser');
 import {gameState} from "./game.js"
 
 let timedEvent;
-const game = this;
+let game;
 
 class ConvoScene extends Phaser.Scene {
     constructor() {
@@ -16,6 +16,7 @@ preload(){
 };
 
 create(){
+  game = this;
     const base = this.physics.add.sprite(25, 450, 'triBase').setScale(12).setImmovable();
 
     /*
@@ -40,11 +41,12 @@ create(){
       /*
       description: Conversation functions with animation display and choice.
       credit: This mostly learned once again through codeCademy's PhaserJS course, through building thier narrative game. 
-      It has been modified for my game, but the credit is thiers. Learning to impliment it was fun though. 
+              It has been modified for my game, but the credit is thiers. Learning to impliment it was fun though.
+      link: https://github.com/Clinscott/CodeCademy/tree/main/phaserjs/narrativegame
       */
       
       renderTriCharacter(this, 'triAngle');
-      renderAdmin(this, 'generalGas')
+      renderAdmin(this, 'generalGas');
       initializePage(this);
       const firstPage = getPage(1);
       displayPage(this, firstPage);
@@ -54,7 +56,7 @@ create(){
         if(gameState.triCharacter){
           gameState.triCharacter.destroy();
         }
-        gameState.triCharacter = scene.add.sprite(1216, 708);
+        gameState.triCharacter = scene.add.sprite(1216, 64);
         //gameState.character.setOrigin(.5, 1);
         gameState.triCharacter.setScale(4);
         gameState.triCharacter.play(key);
@@ -79,12 +81,12 @@ create(){
           gameState.options = [];
         }
       
-        if (!gameState.narrative_background) {
+        /* if (!gameState.narrative_background) {
           // create narrative background
           // if it doesn't exist
           gameState.narrative_background = scene.add.rectangle(10, 360, 430, 170, 0x000);
         gameState.narrative_background.setOrigin(0, 0);
-        }
+        } */
       }
       function destroyPage() {
         // wipe out narrative text and options
@@ -102,22 +104,22 @@ create(){
       }
 
       function displayPage(scene, page) {
-        const narrativeStyle = { fill: '#000000', fontStyle: 'italic', align: 'center', wordWrap: { width: 340 }, lineSpacing: 8};
+        const narrativeStyle = { fill: '#000000', fontStyle: 'italic', align: 'center', wordWrap: { width: 380 }, lineSpacing: 8};
         
         // display general page character
         // & narrative here:
         renderTriCharacter(scene, page.character);
         
       
-        gameState.narrative = scene.add.text(1050 - (page.narrative.length * 4), 680, page.narrative, narrativeStyle);
-      
+        gameState.narrative = scene.add.text(1050 - (page.narrative.length * 6), 32, page.narrative, narrativeStyle);
+
         // for-loop creates different options
         // need the index i for spacing the boxes
         for (let i=0; i<page.options.length; i++) {
           let option = page.options[i];
       
           // color in the option box
-          const optionBox = scene.add.rectangle(40 + i * 130, 470, 110, 40, 0xb39c0e, 0)
+          const optionBox = scene.add.rectangle(150 + i * 130, 700, 200, 100, 0xb39c0e, 0)
           optionBox.strokeColor = 0xb39c0e;
           optionBox.strokeWeight = 2;
           optionBox.strokeAlpha = 1;
@@ -125,18 +127,20 @@ create(){
           optionBox.setOrigin(0, 0)
       
           // add in the option text
-          const baseX = 40 + i * 130;
-          const optionText = scene.add.text(baseX, 480, option.option, { fontSize:14, fill: '#000000', align: 'center', wordWrap: {width: 110}});
+          const baseY = 675 + i * 30;
+          const baseX = 175
+          const optionText = scene.add.text(baseX, baseY, option.option, { fontSize:14, fill: '#000000', align: 'centre', wordWrap: {width: 800}});
           const optionTextBounds = optionText.getBounds()
       
           // centering each option text
-          optionText.setX(optionTextBounds.x + 55 - (optionTextBounds.width / 2));
+          //optionText.setX(optionTextBounds.x + 55 + (optionTextBounds.width / 2));
           optionText.setY(optionTextBounds.y + 10 - (optionTextBounds.height / 2));
       
           // add in gameplay functionality
           // for options here
           
           optionBox.setInteractive();
+
           optionBox.on('pointerup', function(){
            const newPage = this.option.nextPage;
            if (newPage !== undefined){
@@ -145,13 +149,23 @@ create(){
               destroyPage();
               displayPage(scene, getPage(newPage));
             }, [], scene);
+            if (newPage === 6){
+              destroyPage();
+              displayPage(scene, getPage(newPage));
+              timedEvent = scene.time.delayedCall(3000,()=>{
+                game.scene.stop('ConvoScene');
+                game.scene.start('GameScene');
+              }, scene, game);
+            }
            }
           }, { option });
+
           optionBox.on('pointerover', function (){
             this.optionBox.setStrokeStyle(2, 0xffe014, 1);
             this.optionText.setColor('#000000');
           }, { optionBox, optionText });
-              optionBox.on('pointerout', function (){
+
+          optionBox.on('pointerout', function (){
             this.optionBox.setStrokeStyle(1, 0xb38c03, 1);
             this.optionText.setColor('#000000');
           }, { optionBox, optionText });
@@ -167,7 +181,7 @@ create(){
       function getPage(page){
 
         /*
-        description: Each object within the array is a snippet. This was my first snippet, each input is a seperate tabable
+        description: Each object within the convo array is a snippet. This was my first snippet, each input is a seperate tabable
                     event. Snippets rock, learn snippets. This comment is a snippet
         credit: VSCode
         link: https://code.visualstudio.com/docs/editor/userdefinedsnippets
@@ -210,6 +224,24 @@ create(){
           options: [
           {option: 'It is indeed Dire! Will you save us?', nextPage:5},
           {option: 'Once again TriAngle, help us, for you are our only hope', nextPage:5}
+          ]
+          },
+          {
+          character: 'triAngle',
+          page: 5,
+          narrative: 'Alright then, let\'s do this!',
+          admin: 'generalGas',
+          options: [
+          {option: 'Thank You', nextPage:6},
+          ]
+          },
+          {
+          character: 'triAngle',
+          page: 6,
+          narrative: 'Don\'t thank me just yet. I gotta save your ass first.',
+          admin: 'generalGas',
+          options: [
+          {option: '...', nextPage:5},
           ]
           },
       ];
