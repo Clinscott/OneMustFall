@@ -8,15 +8,17 @@ description: Thanks for taking a look at my game triFighter. It is a super fun a
             was so much clearer.
 credit: codecademy phaserjs course
 link: https://github.com/Clinscott/OneMustFall
+further: Best reference along with phasers main website is rexrainbows site with phaser 3 notes. Solid references.
+link: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/
 */  
 
 const Phaser = require("phaser");
-const {GameScene} = require('./gameScene');
-const {EndScene} = require('./endScene');
-const {StartScene} = require('./startScene');
-const {ConvoScene} = require('./convoScene');
-const {MenuScene} = require('./menuScene');
-const {PreloadScene} = require('./preloadScene');
+const {GameScene} = require('./triFighter/levels/gameScene');
+const {EndScene} = require('./triFighter/navigation/endScene');
+const {StartScene} = require('./triFighter/navigation/startScene');
+const {ConvoScene} = require('./triFighter/storyLine/convoScene');
+const {MenuScene} = require('./triFighter/navigation/menuScene');
+const {PreloadScene} = require('./triFighter/navigation/preloadScene');
 
 let gameState = {
     player: {},
