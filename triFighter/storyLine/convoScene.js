@@ -1,4 +1,5 @@
 const Phaser = require('phaser');
+import { Scene } from "phaser";
 import {gameState} from "../../game.js"
 
 let timedEvent;
@@ -51,6 +52,16 @@ create(){
       const firstPage = getPage(1);
       displayPage(this, firstPage);
 
+gameState.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+gameState.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+gameState.aKey.on('up', function(){
+  console.log('a in create');
+})
+
+gameState.dKey.on('up', function(){
+  console.log('d in create');
+})
 
       function renderTriCharacter(scene, key){
         if(gameState.triCharacter){
@@ -103,9 +114,9 @@ create(){
         }
       }
 
+      
       function displayPage(scene, page) {
         const narrativeStyle = { fill: '#000000', fontStyle: 'italic', align: 'center', wordWrap: { width: 380 }, lineSpacing: 8};
-        
         // display general page character
         // & narrative here:
         renderTriCharacter(scene, page.character);
@@ -119,12 +130,64 @@ create(){
           let option = page.options[i];
       
           // color in the option box
-          const optionBox = scene.add.rectangle(150 + i * 130, 700, 200, 100, 0xb39c0e, 0)
+          const optionBox = scene.add.rectangle(128, 675 + i * 32, 20, 20, 0xb39c0e, 0)
           optionBox.strokeColor = 0xb39c0e;
           optionBox.strokeWeight = 2;
           optionBox.strokeAlpha = 1;
           optionBox.isStroked = true;
           optionBox.setOrigin(0, 0)
+        
+       
+
+           /*
+          if(gameState.aKey){
+            optionKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isUp
+            optionKey.on('up', function (){
+              const newPage = this.option.nextPage;
+              if (newPage !== undefined){
+                renderAdmin(scene, page.admin);
+                timedEvent = scene.time.delayedCall(500, ()=>{
+                 destroyPage();
+                 displayPage(scene, getPage(newPage));
+               }, [], scene);
+               if (newPage === 6){
+                 destroyPage();
+                 displayPage(scene, getPage(newPage));
+                 timedEvent = scene.time.delayedCall(3000,()=>{
+                   game.scene.stop('ConvoScene');
+                   game.scene.start('GameScene');
+                 }, scene, game);
+               }
+              }
+             }, { option });
+          }else if(gameState.dKey){
+            optionkey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isUp;
+            optionKey.on('up', function (){
+              const newPage = this.option.nextPage;
+              if (newPage !== undefined){
+                renderAdmin(scene, page.admin);
+                timedEvent = scene.time.delayedCall(500, ()=>{
+                 destroyPage();
+                 displayPage(scene, getPage(newPage));
+               }, [], scene);
+               if (newPage === 6){
+                 destroyPage();
+                 displayPage(scene, getPage(newPage));
+                 timedEvent = scene.time.delayedCall(3000,()=>{
+                   game.scene.stop('ConvoScene');
+                   game.scene.start('GameScene');
+                 }, scene, game);
+               }
+              }
+             }, { option });
+          }
+ */
+/* 
+          const optionBoxTextA = scene.add.text(132, 678, 'A', narrativeStyle);
+          const optionBoxTextS = scene.add.text(132, 710, 'D', narrativeStyle);
+ */
+
+          
       
           // add in the option text
           const baseY = 675 + i * 30;
@@ -183,8 +246,8 @@ create(){
         /*
         description: Each object within the convo array is a snippet. This was my first snippet, each input is a seperate tabable
                     event. Snippets rock, learn snippets. This comment is a snippet
-        credit: VSCode
-        link: https://code.visualstudio.com/docs/editor/userdefinedsnippets
+        credit:     VSCode
+        link:       https://code.visualstudio.com/docs/editor/userdefinedsnippets
         */    
       const convo = [
           {
@@ -193,8 +256,8 @@ create(){
           narrative: 'Yo wassup',
           admin: 'generalGas',
           options: [
-          {option: 'You must save the base TriAngle', nextPage:2},
-          {option: 'Help us TriAngle, you are our only hope', nextPage:2}
+          {key: 'A', option: 'You must save the base TriAngle', nextPage:2},
+          {key: 'D', option: 'Help us TriAngle, you are our only hope', nextPage:2}
           ]
           },
           {
@@ -203,8 +266,8 @@ create(){
           narrative: 'Why should I do that?',
           admin: 'generalGas',
           options: [
-          {option: 'Because we have given unto you your life, and we need you to aid us now!', nextPage:3},
-          {option: 'Please TriAngle, if you fail us, you too shall fall to the wrath of the One of Infinite Angles.', nextPage:4}
+          {key: 'A', option: 'Because we have given unto you your life, and we need you to aid us now!', nextPage:3},
+          {key: 'D', option: 'Please TriAngle, if you fail us, you too shall fall to the wrath of the One of Infinite Angles.', nextPage:4}
           ]
           },
           {
@@ -213,7 +276,7 @@ create(){
           narrative: 'That seams like a very good reason, but really, what\'s in it for me?',
           admin: 'generalGas',
           options: [
-          {option: 'The One of Infinite Angles searches for all our destruction, yours included. This base is the last hope.', nextPage:4}
+          {key: 'A', option: 'The One of Infinite Angles searches for all our destruction, yours included. This base is the last hope.', nextPage:4}
           ]
           },
           {
@@ -222,8 +285,8 @@ create(){
           narrative: 'That seams bad.',
           admin: 'generalGas',
           options: [
-          {option: 'It is indeed Dire! Will you save us?', nextPage:5},
-          {option: 'Once again TriAngle, help us, for you are our only hope', nextPage:5}
+          {key: 'A', option: 'It is indeed Dire! Will you save us?', nextPage:5},
+          {key: 'D', option: 'Once again TriAngle, help us, for you are our only hope', nextPage:5}
           ]
           },
           {
@@ -232,7 +295,7 @@ create(){
           narrative: 'Alright then, let\'s do this!',
           admin: 'generalGas',
           options: [
-          {option: 'Thank You', nextPage:6},
+          {key: 'A', option: 'Thank You', nextPage:6},
           ]
           },
           {
@@ -241,7 +304,7 @@ create(){
           narrative: 'Don\'t thank me just yet. I gotta save your ass first.',
           admin: 'generalGas',
           options: [
-          {option: '...', nextPage:5},
+          {key: 'A', option: '...', nextPage:5},
           ]
           },
       ];
@@ -255,6 +318,22 @@ create(){
 };
 
 update(){
+ /*  const aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown;
+  const dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown;
+
+  if (aKey){
+    gameState.aKey = true;
+    console.log('A hit in update');
+  }else{
+    gameState.akey = false;
+  }
+
+  if(dKey){
+    gameState.dKey = true;
+    console.log('D hit in update');
+  }else{
+    gameState.dKey = false;
+  } */
 
 };
 };

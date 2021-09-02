@@ -326,6 +326,12 @@ if(rightArrow && upArrow){
 }else if(downArrow){
     triMoveDown();
 } else {triStop();}
+} else{
+    triStop();
+    this.physics.pause();
+    this.anims.pauseAll();
+    this.scene.stop('GameScene');
+    this.scene.start('ConvoScene1');
 }
 
 
@@ -333,11 +339,6 @@ if(rightArrow && upArrow){
   squareMove(enemy);
 } */
 
-if(gameState.timer === 0){
-  triStop();
-  this.physics.pause();
-  this.anims.pauseAll();
-};
 
 if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseHealth === 0){
   this.physics.pause();
