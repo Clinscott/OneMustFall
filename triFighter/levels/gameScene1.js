@@ -7,10 +7,10 @@ let game;
 
 
 
-class GameScene extends Phaser.Scene {
+class GameScene1 extends Phaser.Scene {
     constructor() {
       super({
-        key: 'GameScene'
+        key: 'GameScene1'
       })
     }
 
@@ -111,7 +111,7 @@ create(){
       repeat: 59
     });
     createOpponent();
-    timedEvent = this.time.addEvent({delay:5000, callback: createOpponent, callbackScope: this, loop:true});
+    timedEvent = this.time.addEvent({delay:500, callback: createOpponent, callbackScope: this, loop:true});
     
     this.physics.add.collider(gameState.opponents, base, function(triBase, enemy){
         squareDead(enemy);
@@ -486,4 +486,4 @@ if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseH
     };
 };
 
-module.exports = {GameScene};
+module.exports = {GameScene1};

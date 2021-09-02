@@ -212,12 +212,12 @@ gameState.dKey.on('up', function(){
               destroyPage();
               displayPage(scene, getPage(newPage));
             }, [], scene);
-            if (newPage === 6){
+            if (newPage === 12){
               destroyPage();
               displayPage(scene, getPage(newPage));
               timedEvent = scene.time.delayedCall(3000,()=>{
-                game.scene.stop('ConvoScene');
-                game.scene.start('GameScene');
+                game.scene.stop('ConvoScene1');
+                game.scene.start('GameScene1');
               }, scene, game);
             }
            }
@@ -297,7 +297,7 @@ gameState.dKey.on('up', function(){
           admin: 'generalGas',
           options: [
           {key: 'A', option: 'We can make you take more damage.', nextPage:9},
-          {key: 'D', option: 'We can make your attacks more effective.', nextPage:10}
+          {key: 'D', option: 'We can make your attacks more effective.', nextPage:8}
           ]
           },
           {
@@ -306,10 +306,65 @@ gameState.dKey.on('up', function(){
           narrative: 'I have true fists of fury now! Can we improve anything else?',
           admin: 'generalGas',
           options: [
-          {key: 'A', option: 'we can make you take more damage.', nextPage:11},
-          {key: 'D', option: 'We can make the base safer.', nextPage:12}
+          {key: 'A', option: 'We can make you take more damage.', nextPage:9},
+          {key: 'D', option: 'We can make the base safer.', nextPage:7}
           ]
           },
+          {
+          character: 'triAngle',
+          page: 7,
+          narrative: 'The Base looks much mightier! Can we improve anything else?',
+          admin: 'generalGas',
+          options: [
+          {key: 'A', option: 'I am afraid not. We need more angles to improve something else.', nextPage:10},
+          ]
+          },
+          {
+          character: 'triAngle',
+          page: 8,
+          narrative: 'I have true fists of fury now! Can we improve anything else?',
+          admin: 'generalGas',
+          options: [
+          {key: 'A', option: 'I am afraid not. We need more angles to improve something else.', nextPage:10},
+          ]
+          },
+          {
+          character: 'generalGas',
+          page: 9,
+          narrative: 'I feel tougher, like an Ox. Can we improve anything else?',
+          admin: 'generalGas',
+          options: [
+          {key: 'A', option: 'I am afraid not. We need more angles to improve something else.', nextPage:10},
+          ]
+          },
+          {
+          character: 'generalGas',
+          page: 10,
+          narrative: 'How do I get more angles?',
+          admin: 'generalGas',
+          options: [
+          {key: 'A', option: 'Have no fear, for the enemy builds anew. Soon they will come again', nextPage:11},
+          ]
+          },
+          {
+          character: 'generalGas',
+          page: 11,
+          narrative: 'Bring em on! That was almost too easy last time.',
+          admin: 'generalGas',
+          options: [
+          {key: 'A', option: '*mumbling* That is what the last one said.', nextPage:12},
+          ]
+          },
+          {
+          character: 'generalGas',
+          page: 12,
+          narrative: 'I am gonna become The triFighter!',
+          admin: 'generalGas',
+          options: [
+          {key: 'A', option: 'We hope so.', nextPage:12},
+          {key: 'D', option: 'May we be forgiven for what we had to do...', nextPage:12}
+          ]
+          }
       ];
 
       return convo.find(function(e) { if(e.page == page) return e });
