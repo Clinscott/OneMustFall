@@ -1,5 +1,5 @@
 const Phaser = require("phaser");
-import {gameState} from "../../game.js"
+import {gameState} from "../storyLine/convoScene1"
 
 let timedEvent;
 let randomCoord;
@@ -111,7 +111,7 @@ create(){
       repeat: 59
     });
     createOpponent();
-    timedEvent = this.time.addEvent({delay:500, callback: createOpponent, callbackScope: this, loop:true});
+    timedEvent = this.time.addEvent({delay:2500, callback: createOpponent, callbackScope: this, loop:true});
     
     this.physics.add.collider(gameState.opponents, base, function(triBase, enemy){
         squareDead(enemy);

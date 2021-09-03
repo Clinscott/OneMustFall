@@ -1,6 +1,6 @@
 const Phaser = require('phaser');
 import { Scene } from "phaser";
-import {gameState} from "../../game.js"
+import {gameState} from "../levels/gameScene"
 
 let timedEvent;
 let game;
@@ -329,7 +329,7 @@ gameState.dKey.on('up', function(){
           ]
           },
           {
-          character: 'generalGas',
+          character: 'triAngle',
           page: 9,
           narrative: 'I feel tougher, like an Ox. Can we improve anything else?',
           admin: 'generalGas',
@@ -338,7 +338,7 @@ gameState.dKey.on('up', function(){
           ]
           },
           {
-          character: 'generalGas',
+          character: 'triAngle',
           page: 10,
           narrative: 'How do I get more angles?',
           admin: 'generalGas',
@@ -347,7 +347,7 @@ gameState.dKey.on('up', function(){
           ]
           },
           {
-          character: 'generalGas',
+          character: 'triAngle',
           page: 11,
           narrative: 'Bring em on! That was almost too easy last time.',
           admin: 'generalGas',
@@ -356,7 +356,7 @@ gameState.dKey.on('up', function(){
           ]
           },
           {
-          character: 'generalGas',
+          character: 'triAngle',
           page: 12,
           narrative: 'I am gonna become The triFighter!',
           admin: 'generalGas',
@@ -397,3 +397,4 @@ update(){
 };
 
 module.exports = {ConvoScene1};
+export {gameState};

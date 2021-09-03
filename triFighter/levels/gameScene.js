@@ -327,11 +327,7 @@ if(rightArrow && upArrow){
     triMoveDown();
 } else {triStop();}
 } else{
-    triStop();
-    this.physics.pause();
-    this.anims.pauseAll();
-    this.scene.stop('GameScene');
-    this.scene.start('ConvoScene1');
+    endGame(game);
 }
 
 
@@ -348,6 +344,15 @@ if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseH
   this.scene.start('EndScene');
 }
 
+function endGame(game){
+  triStop();
+  gameState.playerInformation.baseHealth = 2;
+  gameState.playerInformation.health = 4;
+  game.physics.pause();
+  game.scene.stop('GameScene');
+  game.scene.start('ConvoScene1');
+  
+}
     // Helper functions to move tri in 8 directions
     function triMoveRight() {
         if(!gameState.playerMove.active){
@@ -487,3 +492,4 @@ if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseH
 };
 
 module.exports = {GameScene};
+export {gameState};
