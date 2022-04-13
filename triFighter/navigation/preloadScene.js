@@ -1,11 +1,11 @@
 const Phaser = require('phaser');
-import {gameState} from "../../game.js"
+import {gameState} from "../../game.js";
 
 class PreloadScene extends Phaser.Scene {
     constructor() {
       super({
         key: 'PreloadScene'
-      })
+      });
     }
 
 preload(){
@@ -89,11 +89,16 @@ link: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
     this.load.audio('theme', './assets/music/omfTheme.mp3');
     this.load.spritesheet('squareFighter', './assets/squareFighter/squareFighterMoves.png', {frameWidth: 32, frameHeight: 32, endFrame:10});
     this.load.spritesheet('triBase', './assets/base/triFighterBase.png', {frameWidth: 32, frameHeight: 32, endFrame:3});
-    this.load.image('triComs', './assets/textMenu.png')//, {frameWidth: 32, frameHeight: 32, endFrame: 6});
+    this.load.image('triComs', './assets/textMenu.png');//, {frameWidth: 32, frameHeight: 32, endFrame: 6});
     this.load.spritesheet('genTriComs', './assets/textMenu.png', {frameWidth: 32, frameHeight: 32, endFrame: 6});
-};
+}
 
 create(){
+
+
+    function multiply(a, b){
+        return a * b;
+    }
 
     /*
     description: Animations for the game
@@ -241,11 +246,11 @@ create(){
         repeat: 10
     });
 
-};
+}
 
 update(){
-};
+}
 
-};
+}
 
 module.exports = {PreloadScene};

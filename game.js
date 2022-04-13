@@ -1,10 +1,10 @@
 const Phaser = require("phaser");
 const {GameScene} = require('./triFighter/levels/gameScene');
-const {GameScene1} = require('./triFighter/levels/gameScene1')
+const {GameScene1} = require('./triFighter/levels/gameScene1');
 const {EndScene} = require('./triFighter/navigation/endScene');
 const {StartScene} = require('./triFighter/navigation/startScene');
 const {ConvoScene} = require('./triFighter/storyLine/convoScene');
-const {ConvoScene1} = require('./triFighter/storyLine/convoScene1')
+const {ConvoScene1} = require('./triFighter/storyLine/convoScene1');
 const {MenuScene} = require('./triFighter/navigation/menuScene');
 const {PreloadScene} = require('./triFighter/navigation/preloadScene');
 

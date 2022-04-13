@@ -1,6 +1,6 @@
 const Phaser = require('phaser');
 import { Scene } from "phaser";
-import {gameState} from "../../game.js"
+import {gameState} from "../../game.js";
 
 let timedEvent;
 let game;
@@ -9,12 +9,12 @@ class ConvoScene extends Phaser.Scene {
     constructor() {
       super({
         key: 'ConvoScene'
-      })
+      });
     }
 
 preload(){
 
-};
+}
 
 create(){
   game = this;
@@ -25,7 +25,7 @@ create(){
     credit: Micheal Hadley over on medium was instrumental for this.
     link: https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
     */
-    const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]]
+    const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]];
     const triComMap = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
     const triComMapTwo = this.make.tilemap({data: triComData, tileWidth: 32, tileHeight: 32});
     const triComTiles = triComMap.addTilesetImage('triComs');
@@ -33,7 +33,7 @@ create(){
     const triComLayerTop = triComMapTwo.createLayer(0, triComTiles, 0, 0).setScale(4);
     
     
-      gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(.5);
+      gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(0.5);
       //this.physics.world.setBounds(64, 256, 1152, 384);
       //gameState.player.setCollideWorldBounds(true);
       gameState.music = this.sound.add('theme');
@@ -57,11 +57,11 @@ gameState.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
 gameState.aKey.on('up', function(){
   console.log('a in create');
-})
+});
 
 gameState.dKey.on('up', function(){
   console.log('d in create');
-})
+});
 
       function renderTriCharacter(scene, key){
         if(gameState.triCharacter){
@@ -80,7 +80,7 @@ gameState.dKey.on('up', function(){
         gameState.admin = scene.add.sprite(64, 708);
         gameState.admin.setScale(4);
         gameState.admin.play(key);
-      };
+      }
 
       function initializePage(scene) {
         // create options list and background
@@ -130,12 +130,12 @@ gameState.dKey.on('up', function(){
           let option = page.options[i];
       
           // color in the option box
-          const optionBox = scene.add.rectangle(128, 675 + i * 32, 20, 20, 0xb39c0e, 0)
+          const optionBox = scene.add.rectangle(128, 675 + i * 32, 20, 20, 0xb39c0e, 0);
           optionBox.strokeColor = 0xb39c0e;
           optionBox.strokeWeight = 2;
           optionBox.strokeAlpha = 1;
           optionBox.isStroked = true;
-          optionBox.setOrigin(0, 0)
+          optionBox.setOrigin(0, 0);
         
        
 
@@ -191,9 +191,9 @@ gameState.dKey.on('up', function(){
       
           // add in the option text
           const baseY = 675 + i * 30;
-          const baseX = 175
+          const baseX = 175;
           const optionText = scene.add.text(baseX, baseY, option.option, { fontSize:14, fill: '#000000', align: 'centre', wordWrap: {width: 800}});
-          const optionTextBounds = optionText.getBounds()
+          const optionTextBounds = optionText.getBounds();
       
           // centering each option text
           //optionText.setX(optionTextBounds.x + 55 + (optionTextBounds.width / 2));
@@ -309,13 +309,13 @@ gameState.dKey.on('up', function(){
           },
       ];
 
-      return convo.find(function(e) { if(e.page == page) return e });
+      return convo.find(function(e) { if(e.page == page) return e; });
     }
 
 
 
 
-};
+}
 
 update(){
  /*  const aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown;
@@ -335,7 +335,7 @@ update(){
     gameState.dKey = false;
   } */
 
-};
-};
+}
+}
 
 module.exports = {ConvoScene};

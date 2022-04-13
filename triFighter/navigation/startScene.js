@@ -1,16 +1,16 @@
 const Phaser = require('phaser');
-import {gameState} from "../../game.js"
+import {gameState} from "../../game.js";
 
 class StartScene extends Phaser.Scene {
     constructor() {
       super({
         key: 'StartScene'
-      })
+      });
     }
 
 preload(){
 
-};
+}
 
 create(){
   this.add.text(95, 250, 'Press T for Story Mode', { fontSize: '30px', fill: '#000000' });
@@ -28,13 +28,13 @@ create(){
   mKey.on('up', ()=>{
     this.scene.stop('StartScene');
     this.scene.start('MenuScene');
-  })
-};
+  });
+}
 
 update(){
 
-};
+}
 
-};
+}
 
 module.exports = {StartScene};

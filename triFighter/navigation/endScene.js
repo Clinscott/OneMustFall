@@ -1,16 +1,16 @@
 const Phaser = require('phaser');
-import {gameState} from "../../game.js"
+import {gameState} from "../../game.js";
 
 
 class EndScene extends Phaser.Scene {
     constructor() {
       super({
         key: 'EndScene'
-      })
+      });
     }
 preload(){
 
-};
+}
 
 create(){
   gameState.timer = 60;
@@ -27,12 +27,12 @@ create(){
     this.scene.start('ConvoScene');
   });
 
-};
+}
 
 update(){
 
-};
+}
 
-};
+}
 
 module.exports = {EndScene};
