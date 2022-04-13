@@ -7,7 +7,7 @@ description: Thanks for taking a look at my game triFighter. It is a super fun a
             While I stumbled more when not directly following the course material I found I learned so much more aside
             from phaser. Then when I jumped back into the course, after my stumbles led to complete road blocks, everything
             was so much clearer.
-credit:     codecademy phaserjs course
+credit:     codecademy's phaserjs course
 link:       https://github.com/Clinscott/OneMustFall
 further:    Best reference along with phasers main website is rexrainbows site with phaser 3 notes. Solid references.
 link:       https://rexrainbow.github.io/phaser3-rex-notes/docs/site/
