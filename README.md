@@ -22,10 +22,10 @@ Link
 
 EvenFurther
 
-  -The dev environment was parcel 2.0.0-nightly.389+288396a5 and browser-sync 2.27.4 in a mac or ubuntu environment.  It was kinda a pain to set up, making sure I had the right compatible version. But once I did it was easy. Dont listen to the versions in the link.
+  - The dev environment was parcel.
 
 Link
 
-  -https://flaviocopes.com/phaser-setup/
+  - https://flaviocopes.com/phaser-setup/
 
 
