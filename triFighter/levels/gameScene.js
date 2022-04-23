@@ -350,7 +350,7 @@ function endGame(game){
   gameState.playerInformation.health = 4;
   game.physics.pause();
   game.scene.stop('GameScene');
-  game.scene.start('ConvoScene1');
+  game.scene.start('ConvoScene1', {triAnglesTotal: gameState.triAnglesInformation.total});
   
 }
     // Helper functions to move tri in 8 directions

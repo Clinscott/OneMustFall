@@ -20,7 +20,7 @@ create(){
   const mKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
   
   tKey.on('up', () => {
-    gameState.timer = 60;
+    gameState.timer = 10;
     this.scene.stop('StartScene');
     this.scene.start('ConvoScene');
   });

@@ -1,6 +1,6 @@
 const Phaser = require('phaser');
 import { Scene } from "phaser";
-import {gameState} from "../../game";
+import {gameState} from '../../game'
 
 let timedEvent;
 let game;
@@ -12,12 +12,24 @@ class ConvoScene1 extends Phaser.Scene {
       });
     }
 
+init(data){
+  console.log('init', data);
+  gameState.triAnglesInformation.total = data.triAnglesTotal
+}
+
 preload(){
 
 }
 
 create(){
   game = this;
+
+  const style = {
+    font: '16px Helvetica',
+    fill: '#000000',
+    padding: {x: 6, y: 7}
+  };
+
     const base = this.physics.add.sprite(25, 450, 'triBase').setScale(12).setImmovable();
 
     /*
@@ -31,13 +43,14 @@ create(){
     const triComTiles = triComMap.addTilesetImage('triComs');
     const triComLayerBottom = triComMap.createLayer(0, triComTiles, 0, 644).setScale(4);
     const triComLayerTop = triComMapTwo.createLayer(0, triComTiles, 0, 0).setScale(4);
+    gameState.triAnglesHealthBar = this.add.text(45, 90, `triAngles: ${gameState.triAnglesInformation.total}`, style);
     
     
       gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(0.5);
       //this.physics.world.setBounds(64, 256, 1152, 384);
       //gameState.player.setCollideWorldBounds(true);
       gameState.music = this.sound.add('theme');
-      //gameState.music.play();
+      /*gameState.music.play();*/
 
       /*
       description: Conversation functions with animation display and choice.
