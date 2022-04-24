@@ -76,9 +76,14 @@ create(){
 
     gameState.playerInformation = {
       name: 'TriFighter',
+      punchLevel: 1,
       health: 3,
       baseHealth: 2,
       baseLevel: 1
+    };
+    
+    gameState.triAnglesInformation = {
+      total: 0
     };
 
     gameState.computerInformation = {
@@ -86,9 +91,6 @@ create(){
       health: 4
     };
 
-    gameState.triAnglesInformation = {
-      total: 0
-    };
 
     const style = {
       font: '16px Helvetica',
@@ -96,10 +98,10 @@ create(){
       padding: {x: 6, y: 7}
     };
 
-    gameState.playerHealthBar = this.add.text(45, 45, `HP: ${gameState.playerInformation.health}`, style);
-    gameState.computerHealthBar = this.add.text(800, 45, `HP: ${gameState.computerInformation.health}`, style);
-    gameState.triAnglesHealthBar = this.add.text(45, 90, `triAngles: ${gameState.triAnglesInformation.total}`, style);
-    gameState.baseHealthBar = this.add.text(45, 135, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
+    gameState.playerHealthBar = this.add.text(45, 10, `HP: ${gameState.playerInformation.health}`, style);
+    gameState.computerHealthBar = this.add.text(800, 10, `HP: ${gameState.computerInformation.health}`, style);
+    gameState.triAnglesHealthBar = this.add.text(45, 30, `triAngles: ${gameState.triAnglesInformation.total}`, style);
+    gameState.baseHealthBar = this.add.text(45, 50, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
     gameState.timerBar = game.add.text(640, 200, `${gameState.timer}`, style);
     //gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
     
@@ -174,6 +176,15 @@ function createTriAngles(enemy){
 }
 
 gameState.opponents.createOpponent = createOpponent;
+
+function triShoot(triAngle){
+  if(gameState.playerInformation.punchLevel === 2){
+    gameState.player.punchShot
+    .create(triAngle.x, triAngle.y, 'triFighter', 10)
+    .setScale(.25)
+    .setCircle(2, 2, 2);
+  }
+}
 
 
 function onWorldBounds(){
@@ -302,8 +313,10 @@ const aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown
 const sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown;
 
 if(gameState.timer > 0){
-if(aKey){
+if(aKey && gameState.playerInformation.punchLevel === 1){
     triPunch();
+}else if(aKey && gameState.playerInformation.punchLevel === 2){
+  triShoot();
 }
 if(sKey){
     triKick();
@@ -350,7 +363,9 @@ function endGame(game){
   gameState.playerInformation.health = 4;
   game.physics.pause();
   game.scene.stop('GameScene');
-  game.scene.start('ConvoScene1', {triAnglesTotal: gameState.triAnglesInformation.total});
+  game.scene.start('ConvoScene1', {
+    triAnglesTotal: gameState.triAnglesInformation.total
+  });
   
 }
     // Helper functions to move tri in 8 directions

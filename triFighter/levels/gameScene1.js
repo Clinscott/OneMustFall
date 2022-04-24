@@ -14,6 +14,21 @@ class GameScene1 extends Phaser.Scene {
       });
     }
 
+init(data){
+  gameState.timer = data.timer
+  gameState.playerInformation = {
+    name: 'TriFighter',
+    punchLevel: data.punchLevel,
+    health: data.playerHealth,
+    baseHealth: data.baseHealth,
+    baseLevel: 1
+  };
+  
+  gameState.triAnglesInformation = {
+    total: data.triAnglesTotal
+  };
+}
+
 preload(){
     
 }
@@ -74,20 +89,10 @@ create(){
 
     gameState.triAngles = this.physics.add.group();
 
-    gameState.playerInformation = {
-      name: 'TriFighter',
-      health: 3,
-      baseHealth: 2,
-      baseLevel: 1
-    };
 
     gameState.computerInformation = {
       name: 'SquareFighter',
       health: 4
-    };
-
-    gameState.triAnglesInformation = {
-      total: 0
     };
 
     const style = {
@@ -111,7 +116,7 @@ create(){
       repeat: 59
     });
     createOpponent();
-    timedEvent = this.time.addEvent({delay:2500, callback: createOpponent, callbackScope: this, loop:true});
+    timedEvent = this.time.addEvent({delay:10000, callback: createOpponent, callbackScope: this, loop:true});
     
     this.physics.add.collider(gameState.opponents, base, function(triBase, enemy){
         squareDead(enemy);
@@ -174,6 +179,15 @@ function createTriAngles(enemy){
 }
 
 gameState.opponents.createOpponent = createOpponent;
+
+function triShoot(triAngle){
+  if(gameState.playerInformation.punchLevel === 2){
+    gameState.player.punchShot
+    .create(triAngle.x, triAngle.y, 'triFighter', 10)
+    .setScale(.25)
+    .setCircle(2, 2, 2);
+  }
+}
 
 
 function onWorldBounds(){
@@ -302,8 +316,10 @@ const aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown
 const sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown;
 
 if(gameState.timer > 0){
-if(aKey){
+if(aKey && gameState.playerInformation.punchLevel === 1){
     triPunch();
+}else if(aKey && gameState.playerInformation.punchLevel === 2){
+  triShoot();
 }
 if(sKey){
     triKick();
@@ -327,11 +343,7 @@ if(rightArrow && upArrow){
     triMoveDown();
 } else {triStop();}
 } else{
-    triStop();
-    this.physics.pause();
-    this.anims.pauseAll();
-    this.scene.stop('GameScene');
-    this.scene.start('ConvoScene1');
+    endGame(game);
 }
 
 
@@ -348,6 +360,17 @@ if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseH
   this.scene.start('EndScene');
 }
 
+function endGame(game){
+  triStop();
+  gameState.playerInformation.baseHealth = 2;
+  gameState.playerInformation.health = 4;
+  game.physics.pause();
+  game.scene.stop('GameScene');
+  game.scene.start('ConvoScene1', {
+    triAnglesTotal: gameState.triAnglesInformation.total
+  });
+  
+}
     // Helper functions to move tri in 8 directions
     function triMoveRight() {
         if(!gameState.playerMove.active){

@@ -43,7 +43,10 @@ create(){
     const triComTiles = triComMap.addTilesetImage('triComs');
     const triComLayerBottom = triComMap.createLayer(0, triComTiles, 0, 644).setScale(4);
     const triComLayerTop = triComMapTwo.createLayer(0, triComTiles, 0, 0).setScale(4);
-    gameState.triAnglesHealthBar = this.add.text(45, 90, `triAngles: ${gameState.triAnglesInformation.total}`, style);
+    gameState.playerHealthBar = this.add.text(45, 10, `HP: ${gameState.playerInformation.health}`, style);
+    gameState.computerHealthBar = this.add.text(800, 10, `HP: ${gameState.computerInformation.health}`, style);
+    gameState.triAnglesHealthBar = this.add.text(45, 30, `triAngles: ${gameState.triAnglesInformation.total}`, style);
+    gameState.baseHealthBar = this.add.text(45, 50, `BASE HP: ${gameState.playerInformation.baseHealth}`, style);
     
     
       gameState.player = this.physics.add.sprite(275, 445, 'triFighter').setScale(0.5);
@@ -127,6 +130,33 @@ gameState.dKey.on('up', function(){
         }
       }
 
+      function increaseTriHealth(){
+        gameState.playerInformation.health += 2;
+        gameState.playerHealthBar.text = `HP: ${gameState.playerInformation.health}`;
+        gameState.triAnglesInformation.total -= 3;
+        gameState.triAnglesHealthBar.text = `triAngles: ${gameState.triAnglesInformation.total}`;
+      }
+
+      function increasePunch(){
+        gameState.playerInformation.punchLevel++
+        gameState.triAnglesInformation.total -= 3;
+        gameState.triAnglesHealthBar.text = `triAngles: ${gameState.triAnglesInformation.total}`;
+      }
+
+      function increaseBaseDefense(){
+        gameState.triAnglesInformation.baseLevel++
+        gameState.triAnglesInformation.total -= 3;
+        gameState.triAnglesHealthBar.text = `triAngles: ${gameState.triAnglesInformation.total}`;
+      }
+      /*if (page === 4 || 9){
+        increaseTriHealth();
+      }
+      if (page === 5 || 7){
+        increaseBaseDefense();
+      }
+      if (page === 6 || 8){
+        increasePunch();
+      }*/
       
       function displayPage(scene, page) {
         const narrativeStyle = { fill: '#000000', fontStyle: 'italic', align: 'center', wordWrap: { width: 380 }, lineSpacing: 8};
@@ -214,26 +244,35 @@ gameState.dKey.on('up', function(){
       
           // add in gameplay functionality
           // for options here
-          
+
           optionBox.setInteractive();
 
           optionBox.on('pointerup', function(){
            const newPage = this.option.nextPage;
+           
            if (newPage !== undefined){
              renderAdmin(scene, page.admin);
              timedEvent = scene.time.delayedCall(500, ()=>{
               destroyPage();
               displayPage(scene, getPage(newPage));
             }, [], scene);
+          }
+       
+
             if (newPage === 12){
               destroyPage();
               displayPage(scene, getPage(newPage));
               timedEvent = scene.time.delayedCall(3000,()=>{
                 game.scene.stop('ConvoScene1');
-                game.scene.start('GameScene1');
+                game.scene.start('GameScene1', {
+                    playerHealth: gameState.playerInformation.health,
+                    baseHealth: gameState.playerInformation.baseHealth,
+                    punchLevel: gameState.playerInformation.punchLevel,
+                    triAnglesTotal: gameState.triAnglesInformation.total,
+                    timer: 60
+                });
               }, scene, game);
             }
-           }
           }, { option });
 
           optionBox.on('pointerover', function (){

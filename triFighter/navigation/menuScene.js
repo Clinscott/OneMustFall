@@ -23,7 +23,7 @@ update(){
   const mKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
   
   tKey.on('up', () => {
-    gameState.timer = 10;
+    gameState.timer = 60;
     loadGame();
   });
 
