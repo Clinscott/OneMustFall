@@ -13,7 +13,7 @@ preload(){
 }
 
 create(){
-  this.add.text(95, 250, 'Press T to Start Game!', { fontSize: '30px', fill: '#000000' });
+  this.add.text(95, 250, 'Press T to Start Game!!', { fontSize: '30px', fill: '#000000' });
   this.add.text(95, 350, 'Press M to exit Game.', {fontSize: '30px', fill: '#000000'});
 
 }

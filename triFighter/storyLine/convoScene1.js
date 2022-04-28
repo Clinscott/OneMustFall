@@ -266,7 +266,7 @@ gameState.dKey.on('up', function(){
                 game.scene.stop('ConvoScene1');
                 game.scene.start('GameScene1', {
                     playerHealth: gameState.playerInformation.health,
-                    baseHealth: gameState.playerInformation.baseHealth,
+                    baseLevel: gameState.playerInformation.baseLevel,
                     punchLevel: gameState.playerInformation.punchLevel,
                     triAnglesTotal: gameState.triAnglesInformation.total,
                     timer: 60

@@ -16,6 +16,7 @@ class GameScene1 extends Phaser.Scene {
 
 init(data){
   gameState.timer = data.timer
+  
   gameState.playerInformation = {
     name: 'TriFighter',
     punchLevel: data.punchLevel,

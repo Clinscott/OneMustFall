@@ -7,6 +7,9 @@ const {ConvoScene} = require('./triFighter/storyLine/convoScene');
 const {ConvoScene1} = require('./triFighter/storyLine/convoScene1');
 const {MenuScene} = require('./triFighter/navigation/menuScene');
 const {PreloadScene} = require('./triFighter/navigation/preloadScene');
+const {PunchScene} = require('./triFighter/storyLine/upgrade/PunchScene');
+const {HealthScene} = require('./triFighter/storyLine/upgrade/HealthScene');
+const {BaseScene} = require('./triFighter/storyLine/upgrade/BaseScene');
 
 let gameState = {
     player: {},
@@ -62,6 +65,9 @@ const config = {
         GameScene1, 
         ConvoScene,
         ConvoScene1,
+        BaseScene,
+        PunchScene,
+        HealthScene,
         EndScene],
     physics: {
         default: 'arcade',

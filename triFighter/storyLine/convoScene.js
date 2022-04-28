@@ -1,9 +1,11 @@
 const Phaser = require('phaser');
 import { Scene } from "phaser";
 import {gameState} from "../../game.js";
+import {convo} from './convo'
 
 let timedEvent;
 let game;
+let newPage;
 
 class ConvoScene extends Phaser.Scene {
     constructor() {
@@ -11,6 +13,27 @@ class ConvoScene extends Phaser.Scene {
         key: 'ConvoScene'
       });
     }
+
+init(data){
+  console.log(data)
+  gameState.playerInformation = {
+    name: 'TriFighter',
+    punchLevel: data.punchLevel,
+    health: data.playerHealth,
+    baseHealth: data.baseHealth,
+    baseLevel: data.baseLevel
+  };
+  
+  gameState.triAnglesInformation = {
+    total: data.triAnglesTotal
+  };
+
+  if(!newPage){
+    newPage = 1
+  }else{
+    newPage = data.page
+  }
+}
 
 preload(){
 
@@ -49,8 +72,9 @@ create(){
       renderTriCharacter(this, 'triAngle');
       renderAdmin(this, 'generalGas');
       initializePage(this);
-      const firstPage = getPage(1);
+      const firstPage = getPage(newPage);
       displayPage(this, firstPage);
+
 
 gameState.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 gameState.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -206,21 +230,58 @@ gameState.dKey.on('up', function(){
 
           optionBox.on('pointerup', function(){
            const newPage = this.option.nextPage;
+           console.log(newPage)
            if (newPage !== undefined){
+            console.log(newPage)
              renderAdmin(scene, page.admin);
              timedEvent = scene.time.delayedCall(500, ()=>{
               destroyPage();
               displayPage(scene, getPage(newPage));
             }, [], scene);
-            if (newPage === 6){
+
+            /*if (newPage === 11 || 13){
               destroyPage();
               displayPage(scene, getPage(newPage));
               timedEvent = scene.time.delayedCall(3000,()=>{
-                game.scene.stop('ConvoScene');
-                game.scene.start('GameScene');
+                game.scene.start('BaseScene', {page: newPage});
               }, scene, game);
             }
+            if (newPage === 12 || 14){
+              destroyPage();
+              displayPage(scene, getPage(newPage));
+              timedEvent = scene.time.delayedCall(3000,()=>{
+                game.scene.start('HealthScene', {page: newPage});
+              }, scene, game);
+            }
+            */
            }
+           if(newPage !== 6){
+            console.log(newPage)
+            newPage = newPage;
+          }else if(newPage === 6){
+            console.log('I worked!')
+            console.log(newPage)
+            timedEvent = scene.time.delayedCall(3000,()=>{
+              game.scene.start('GameScene', {
+                page: newPage,
+                playerHealth: gameState.playerInformation.health,
+                baseLevel: gameState.playerInformation.baseLevel,
+                punchLevel: gameState.playerInformation.punchLevel,
+                triAnglesTotal: gameState.triAnglesInformation.total,
+                timer: 60
+              });
+            }, game, scene);
+          }else if(newPage !== 10){
+            console.log(newPage)
+            newPage = newPage;
+          }else if(newPage === 10){
+            console.log(newPage)
+            console.log('Health Scene!')
+            timedEvent = scene.time.delayedCall(3000,()=>{
+            game.scene.start('HealthScene', {page: newPage});
+            }, game, scene);
+          }
+           
           }, { option });
 
           optionBox.on('pointerover', function (){
@@ -249,65 +310,8 @@ gameState.dKey.on('up', function(){
         credit:     VSCode
         link:       https://code.visualstudio.com/docs/editor/userdefinedsnippets
         */    
-      const convo = [
-          {
-          character: 'triAngle',
-          page: 1,
-          narrative: 'Yo wassup',
-          admin: 'generalGas',
-          options: [
-          {key: 'A', option: 'You must save the base TriAngle', nextPage:2},
-          {key: 'D', option: 'Help us TriAngle, you are our only hope', nextPage:2}
-          ]
-          },
-          {
-          character: 'triAngle',
-          page: 2 ,
-          narrative: 'Why should I do that?',
-          admin: 'generalGas',
-          options: [
-          {key: 'A', option: 'Because we have given unto you your life, and we need you to aid us now!', nextPage:3},
-          {key: 'D', option: 'Please TriAngle, if you fail us, you too shall fall to the wrath of the One of Infinite Angles.', nextPage:4}
-          ]
-          },
-          {
-          character: 'triAngle',
-          page: 3,
-          narrative: 'That seams like a very good reason, but really, what\'s in it for me?',
-          admin: 'generalGas',
-          options: [
-          {key: 'A', option: 'The One of Infinite Angles searches for all our destruction, yours included. This base is the last hope.', nextPage:4}
-          ]
-          },
-          {
-          character: 'triAngle',
-          page: 4,
-          narrative: 'That seams bad.',
-          admin: 'generalGas',
-          options: [
-          {key: 'A', option: 'It is indeed Dire! Will you save us?', nextPage:5},
-          {key: 'D', option: 'Once again TriAngle, help us, for you are our only hope', nextPage:5}
-          ]
-          },
-          {
-          character: 'triAngle',
-          page: 5,
-          narrative: 'Alright then, let\'s do this!',
-          admin: 'generalGas',
-          options: [
-          {key: 'A', option: 'Thank You', nextPage:6},
-          ]
-          },
-          {
-          character: 'triAngle',
-          page: 6,
-          narrative: 'Don\'t thank me just yet. I gotta save your ass first.',
-          admin: 'generalGas',
-          options: [
-          {key: 'A', option: '...', nextPage:5},
-          ]
-          },
-      ];
+      
+    
 
       return convo.find(function(e) { if(e.page == page) return e; });
     }
@@ -334,6 +338,7 @@ update(){
   }else{
     gameState.dKey = false;
   } */
+
 
 }
 }

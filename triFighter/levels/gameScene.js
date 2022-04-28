@@ -4,6 +4,7 @@ import {gameState} from "../../game.js";
 let timedEvent;
 let randomCoord;
 let game;
+let newPage;
 
 
 
@@ -14,11 +15,31 @@ class GameScene extends Phaser.Scene {
       });
     }
 
+    init(data){
+      console.log(data)
+      newPage = data.page
+      newPage++
+      console.log(newPage)
+      gameState.playerInformation = {
+        name: 'TriFighter',
+        punchLevel: data.punchLevel,
+        health: data.playerHealth,
+        baseHealth: data.baseHealth,
+        baseLevel: data.baseLevel
+      };
+      
+      gameState.triAnglesInformation = {
+        total: data.triAnglesTotal
+      };
+      gameState.timer = data.timer
+    }
+
 preload(){
     
 }
 
 create(){
+  console.log('GameScene')
 
   const base = this.physics.add.sprite(25, 450, 'triBase').setScale(12).setImmovable();
   const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]];
@@ -359,12 +380,15 @@ if(gameState.playerInformation.health === 0 || gameState.playerInformation.baseH
 
 function endGame(game){
   triStop();
-  gameState.playerInformation.baseHealth = 2;
-  gameState.playerInformation.health = 4;
   game.physics.pause();
   game.scene.stop('GameScene');
-  game.scene.start('ConvoScene1', {
-    triAnglesTotal: gameState.triAnglesInformation.total
+  game.scene.start('ConvoScene', {
+    triAnglesTotal: gameState.triAnglesInformation.total,
+    page: newPage,
+    playerHealth: gameState.playerInformation.health,
+    baseLevel: gameState.playerInformation.baseLevel,
+    punchLevel: gameState.playerInformation.punchLevel,
+    timer: 60
   });
   
 }
@@ -507,4 +531,4 @@ function endGame(game){
 }
 
 module.exports = {GameScene};
-export {gameState};
+export {style};

@@ -11,8 +11,13 @@
     "acorn": "^6.4.2",
     "acorn-globals": "^4.3.4",
     "acorn-walk": "^6.2.0",
-    "browser-sync": "^2.27.4",
-    "parcel": "^2.0.0-nightly.389",
+    "browser-sync": "^1.9.2",
     "phaser": "^3.55.2"
+  },
+  "devDependencies": {
+    "events": "^3.3.0",
+    "parcel": "^2.5.0",
+    "path-browserify": "^1.0.1",
+    "stream-browserify": "^3.0.0"
   }
 }
