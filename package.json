@@ -11,7 +11,6 @@
     "acorn": "^6.4.2",
     "acorn-globals": "^4.3.4",
     "acorn-walk": "^6.2.0",
-    "browser-sync": "^1.9.2",
     "phaser": "^3.55.2"
   },
   "devDependencies": {
