@@ -1,8 +1,8 @@
 import { gameState } from "../../../game";
 
-export default function getData(data) {
-    console.log(data)
- gameState.playerInformation = {
+export default function getData(data, gameState) {
+  console.log(data);
+  gameState.playerInformation = {
     name: "TriFighter",
     punchLevel: data.punchLevel,
     health: data.playerHealth,
@@ -14,4 +14,5 @@ export default function getData(data) {
     total: data.triAnglesTotal,
   };
   gameState.timer = data.timer;
+  return { gameState };
 }

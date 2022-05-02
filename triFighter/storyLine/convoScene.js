@@ -20,25 +20,26 @@ class ConvoScene extends Phaser.Scene {
   }
 
   init(data) {
-    console.log(data)
+    console.log(data);
     gameState.playerInformation = {
-    name: "TriFighter",
-    punchLevel: data.punchLevel,
-    health: data.playerHealth,
-    baseHealth: data.baseHealth,
-    baseLevel: data.baseLevel,
-  };
+      name: "TriFighter",
+      punchLevel: data.punchLevel,
+      health: data.playerHealth,
+      baseHealth: data.baseHealth,
+      baseLevel: data.baseLevel,
+    };
 
-  gameState.triAnglesInformation = {
-    total: data.triAnglesTotal,
-  };
-  gameState.timer = data.timer;
-    if (!newPage) {
+    gameState.triAnglesInformation = {
+      total: data.triAnglesTotal,
+    };
+    gameState.timer = data.timer;
+    console.log("GameState:");
+    console.log({ ...gameState });
+    if (!data.page) {
       newPage = 1;
     } else {
       newPage = data.page;
     }
-    
   }
   preload() {}
 

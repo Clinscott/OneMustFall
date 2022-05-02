@@ -1,7 +1,7 @@
 const Phaser = require("phaser");
 import { gameState } from "../../game.js";
-import getData from '../storyLine/components/getData'
-import gameSceneTransfer from '../storyLine/components/gameSceneTransfer'
+import getData from "../storyLine/components/getData";
+import gameSceneTransfer from "../storyLine/components/gameSceneTransfer";
 import { Scene } from "phaser";
 
 let timedEvent;
@@ -17,13 +17,15 @@ class GameScene extends Phaser.Scene {
   }
 
   init(data) {
-    getData(data)
-    if (!newPage) {
+    getData(data, gameState);
+    console.log("GameState:");
+    console.log({ ...gameState });
+    if (!data.page) {
       newPage = 1;
     } else {
       newPage = data.page;
+      newPage++;
     }
-    newPage++;
   }
 
   preload() {}
@@ -69,7 +71,7 @@ class GameScene extends Phaser.Scene {
     gameState.player.setCollideWorldBounds(true);
     gameState.player.body.collideWorldBounds = true;
     gameState.music = this.sound.add("theme");
-    gameState.music.play();
+    //gameState.music.play();
     gameState.playerMove.active = false;
     gameState.playerMove.activeHit = false;
     game = this;
@@ -386,7 +388,7 @@ class GameScene extends Phaser.Scene {
   credit: codecademy business outfitted bob game. 
   link: https://www.codecademy.com/paths/create-video-games-with-phaser/tracks/game-dev-learn-javascript-basics/modules/game-dev-project-variables-and-conditionals/projects/business-outfitted-bob
   */
- game = this;
+    game = this;
     // Arrow keys that will move tri in 4 directions
     const cursors = this.input.keyboard.createCursorKeys();
     //Variables that store if a specific arrow key is being pressed
@@ -453,13 +455,7 @@ class GameScene extends Phaser.Scene {
     function endGame(game) {
       triStop();
       game.physics.pause();
-      gameSceneTransfer(
-        "ConvoScene",
-        newPage,
-        timedEvent,
-        game,
-        gameState
-      );
+      gameSceneTransfer("ConvoScene", newPage, timedEvent, game, gameState);
     }
     // Helper functions to move tri in 8 directions
     function triMoveRight() {
