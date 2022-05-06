@@ -14,11 +14,11 @@ class StartScene extends Phaser.Scene {
   create() {
     let game = this;
 
-    title(game, 0, 0, 4)
+    title(game, 0, 0, 4);
     this.add.text(350, 300, "Start", {
       fontSize: "30px",
       fill: "#000000",
-    })
+    });
     this.add.text(350, 400, "Press T for Story Mode", {
       fontSize: "30px",
       fill: "#000000",

@@ -8,5 +8,3 @@ export default makeRoad = (game, x, y, scale) => {
   const roadTiles = roadMap.addTilesetImage("triFighterStreet");
   const roadLayer = roadMap.createLayer(0, roadTiles, x, y).setScale(scale);
 };
-
-

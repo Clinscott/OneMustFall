@@ -7,7 +7,7 @@ import baseSceneUpgrade from "./upgrade/components/baseSceneUpgrade";
 import healthSceneUpgrade from "./upgrade/components/healthSceneUpgrade";
 import gameSceneTransfer from "./components/gameSceneTransfer";
 import getData from "./components/getData";
-import title from "../components/title"
+import title from "../components/title";
 import makeTriComs from "../components/makeTriComs.js";
 import makeRoad from "../components/makeRoad";
 import renderTriCharacter from "./components/renderTriCharacter.js";
@@ -51,9 +51,8 @@ class ConvoScene extends Phaser.Scene {
     game = this;
     //const background = this.add.image(0,0,"triFighterBackground");
 
-    title(game,0,0,4)
-    makeRoad(game,100, 325, 1)
-  
+    title(game, 0, 0, 4);
+    makeRoad(game, 100, 325, 1);
 
     const base = this.physics.add
       .sprite(25, 450, "triBase")
@@ -66,7 +65,7 @@ class ConvoScene extends Phaser.Scene {
     link: https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
     */
 
-    makeTriComs(game,0, 644, 4);
+    makeTriComs(game, 0, 644, 4);
     makeTriComs(game, 0, 128, 4);
 
     gameState.player = this.physics.add
@@ -104,8 +103,6 @@ class ConvoScene extends Phaser.Scene {
     gameState.dKey.on("up", function () {
       console.log("d in create");
     });
-
-
 
     function renderAdmin(scene, key) {
       if (gameState.admin) {

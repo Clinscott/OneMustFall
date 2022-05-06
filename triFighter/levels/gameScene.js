@@ -60,15 +60,14 @@ class GameScene extends Phaser.Scene {
     makeTriComs(game, 0, 644, 4);
     makeTriComs(game, 0, 128, 4);
 
-    const showControls = ()=>{
+    const showControls = () => {
       const punchControl = this.add.text(350, 700, "A: Punch", style);
       const moveUp = this.add.text(600, 675, "UP: Up Arrow", style);
       const moveDown = this.add.text(600, 725, "DOWN: Down Arrow", style);
       const moveLeft = this.add.text(450, 700, "LEFT: Left Arrow", style);
       const moveRight = this.add.text(750, 700, "RIGHT: Right Arrow", style);
-    }
+    };
     showControls();
-
 
     renderTriCharacter(game, "triLogoFight");
 
@@ -126,7 +125,6 @@ class GameScene extends Phaser.Scene {
       name: "SquareFighter",
       health: 4,
     };
-
 
     gameState.playerHealthBar = this.add.text(
       128,

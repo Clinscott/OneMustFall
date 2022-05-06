@@ -10,4 +10,3 @@ export default makeTriComs = (game, x, y, scale) => {
     .createLayer(0, triComTiles, x, y)
     .setScale(scale);
 };
-
