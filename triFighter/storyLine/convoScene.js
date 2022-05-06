@@ -7,6 +7,10 @@ import baseSceneUpgrade from "./upgrade/components/baseSceneUpgrade";
 import healthSceneUpgrade from "./upgrade/components/healthSceneUpgrade";
 import gameSceneTransfer from "./components/gameSceneTransfer";
 import getData from "./components/getData";
+import title from "../components/title"
+import makeTriComs from "../components/makeTriComs.js";
+import makeRoad from "../components/makeRoad";
+import renderTriCharacter from "./components/renderTriCharacter.js";
 
 let timedEvent;
 let game;
@@ -45,6 +49,12 @@ class ConvoScene extends Phaser.Scene {
 
   create() {
     game = this;
+    //const background = this.add.image(0,0,"triFighterBackground");
+
+    title(game,0,0,4)
+    makeRoad(game,100, 325, 1)
+  
+
     const base = this.physics.add
       .sprite(25, 450, "triBase")
       .setScale(12)
@@ -55,24 +65,9 @@ class ConvoScene extends Phaser.Scene {
     credit: Micheal Hadley over on medium was instrumental for this.
     link: https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
     */
-    const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]];
-    const triComMap = this.make.tilemap({
-      data: triComData,
-      tileWidth: 32,
-      tileHeight: 32,
-    });
-    const triComMapTwo = this.make.tilemap({
-      data: triComData,
-      tileWidth: 32,
-      tileHeight: 32,
-    });
-    const triComTiles = triComMap.addTilesetImage("triComs");
-    const triComLayerBottom = triComMap
-      .createLayer(0, triComTiles, 0, 644)
-      .setScale(4);
-    const triComLayerTop = triComMapTwo
-      .createLayer(0, triComTiles, 0, 0)
-      .setScale(4);
+
+    makeTriComs(game,0, 644, 4);
+    makeTriComs(game, 0, 128, 4);
 
     gameState.player = this.physics.add
       .sprite(275, 445, "triFighter")
@@ -80,7 +75,7 @@ class ConvoScene extends Phaser.Scene {
     //this.physics.world.setBounds(64, 256, 1152, 384);
     //gameState.player.setCollideWorldBounds(true);
     gameState.music = this.sound.add("theme");
-    //gameState.music.play();
+    gameState.music.play();
 
     /*
       description: Conversation functions with animation display and choice.
@@ -110,15 +105,7 @@ class ConvoScene extends Phaser.Scene {
       console.log("d in create");
     });
 
-    function renderTriCharacter(scene, key) {
-      if (gameState.triCharacter) {
-        gameState.triCharacter.destroy();
-      }
-      gameState.triCharacter = scene.add.sprite(1216, 64);
-      //gameState.character.setOrigin(.5, 1);
-      gameState.triCharacter.setScale(4);
-      gameState.triCharacter.play(key);
-    }
+
 
     function renderAdmin(scene, key) {
       if (gameState.admin) {
@@ -174,8 +161,8 @@ class ConvoScene extends Phaser.Scene {
       renderTriCharacter(scene, page.character);
 
       gameState.narrative = scene.add.text(
-        1050 - page.narrative.length * 6,
-        32,
+        128,
+        160,
         page.narrative,
         narrativeStyle
       );

@@ -1,8 +1,18 @@
+/*
+  description: This code before you is the main game engine for my first game, triFighter.
+  credit: Craig Linscott
+  link: https://github.com/clinscott
+  */
+
 const Phaser = require("phaser");
 import { gameState } from "../../game.js";
 import getData from "../storyLine/components/getData";
 import gameSceneTransfer from "../storyLine/components/gameSceneTransfer";
 import { Scene } from "phaser";
+import title from "../components/title";
+import makeTriComs from "../components/makeTriComs.js";
+import makeRoad from "../components/makeRoad.js";
+import renderTriCharacter from "../storyLine/components/renderTriCharacter.js";
 
 let timedEvent;
 let randomCoord;
@@ -33,37 +43,36 @@ class GameScene extends Phaser.Scene {
   create() {
     console.log("GameScene");
     game = this;
+    const style = {
+      font: "16px Helvetica",
+      fill: "#000000",
+      padding: { x: 6, y: 7 },
+    };
+
+    title(game, 0, 0, 4);
+    makeRoad(game, 100, 325, 1);
 
     const base = this.physics.add
       .sprite(25, 450, "triBase")
       .setScale(12)
       .setImmovable();
-    const triComData = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 2]];
-    const triComMap = this.make.tilemap({
-      data: triComData,
-      tileWidth: 32,
-      tileHeight: 32,
-    });
-    const triComMapTwo = this.make.tilemap({
-      data: triComData,
-      tileWidth: 32,
-      tileHeight: 32,
-    });
-    const triComTiles = triComMap.addTilesetImage("triComs");
-    const triComLayerBottom = triComMap
-      .createLayer(0, triComTiles, 0, 644)
-      .setScale(4);
-    const triComLayerTop = triComMapTwo
-      .createLayer(0, triComTiles, 0, 0)
-      .setScale(4);
 
-    /*
-  description: This insanity of code before you is the main game engine for my first game, triFighter.
-  credit: Craig Linscott
-  link: https://github.com/clinscott
-  */
+    makeTriComs(game, 0, 644, 4);
+    makeTriComs(game, 0, 128, 4);
 
-    gameState.information = this.add.sprite(640, 64, "fight").setScale(0.5);
+    const showControls = ()=>{
+      const punchControl = this.add.text(350, 700, "A: Punch", style);
+      const moveUp = this.add.text(600, 675, "UP: Up Arrow", style);
+      const moveDown = this.add.text(600, 725, "DOWN: Down Arrow", style);
+      const moveLeft = this.add.text(450, 700, "LEFT: Left Arrow", style);
+      const moveRight = this.add.text(750, 700, "RIGHT: Right Arrow", style);
+    }
+    showControls();
+
+
+    renderTriCharacter(game, "triLogoFight");
+
+    gameState.information = this.add.sprite(640, 180, "fight").setScale(0.5);
     gameState.player = this.physics.add
       .sprite(275, 445, "triFighter")
       .setScale(0.5);
@@ -71,10 +80,9 @@ class GameScene extends Phaser.Scene {
     gameState.player.setCollideWorldBounds(true);
     gameState.player.body.collideWorldBounds = true;
     gameState.music = this.sound.add("theme");
-    //gameState.music.play();
+    gameState.music.play();
     gameState.playerMove.active = false;
     gameState.playerMove.activeHit = false;
-    game = this;
     gameState.information.velocity = [0, -100, 100, -150, 150, -25, 25];
 
     gameState.player.setCircle(46, 46, 100);
@@ -119,37 +127,32 @@ class GameScene extends Phaser.Scene {
       health: 4,
     };
 
-    const style = {
-      font: "16px Helvetica",
-      fill: "#000000",
-      padding: { x: 6, y: 7 },
-    };
 
     gameState.playerHealthBar = this.add.text(
-      45,
-      10,
+      128,
+      156,
       `HP: ${gameState.playerInformation.health}`,
       style
     );
-    gameState.computerHealthBar = this.add.text(
+    /*gameState.computerHealthBar = this.add.text(
       800,
       10,
       `HP: ${gameState.computerInformation.health}`,
       style
-    );
+    );*/
     gameState.triAnglesHealthBar = this.add.text(
-      45,
-      30,
+      128,
+      176,
       `triAngles: ${gameState.triAnglesInformation.total}`,
       style
     );
     gameState.baseHealthBar = this.add.text(
-      45,
-      50,
+      128,
+      196,
       `BASE HP: ${gameState.playerInformation.baseHealth}`,
       style
     );
-    gameState.timerBar = game.add.text(640, 200, `${gameState.timer}`, style);
+    //gameState.timerBar = game.add.text(640, 200, `${gameState.timer}`, style);
     //gameState.computerHealthBar.text = `HP: ${gameState.computerInformation.health}`;
 
     const fightClock = this.time.addEvent({
@@ -368,7 +371,7 @@ class GameScene extends Phaser.Scene {
 
     function fightCounter() {
       gameState.timer--;
-      gameState.timerBar.text = `${gameState.timer}`;
+      //gameState.timerBar.text = `${gameState.timer}`;
     }
 
     function squareMove(enemy) {
@@ -409,9 +412,6 @@ class GameScene extends Phaser.Scene {
         triPunch();
       } else if (aKey && gameState.playerInformation.punchLevel === 2) {
         triShoot();
-      }
-      if (sKey) {
-        triKick();
       }
 
       if (rightArrow && upArrow) {

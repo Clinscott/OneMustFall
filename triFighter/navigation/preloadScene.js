@@ -107,9 +107,27 @@ link: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
     this.load.spritesheet("genTriComs", "./assets/textMenu.png", {
       frameWidth: 32,
       frameHeight: 32,
-      endFrame: 6,
+      endFrame: 8,
     });
-  }
+    this.load.spritesheet("triTitle", "./assets/triTitleSheet.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+      endFrame: 9,
+    });
+    this.load.spritesheet(
+      "triFighterStreet",
+      "./assets/base/triFighterStreet.gif",
+      {
+        frameWidth: 256,
+        frameHeight: 256,
+        endFrame: 0,
+      }
+    );
+    this.load.image(
+      "triFighterBackground",
+      "./assets/base/triFighterBackground.jpg"
+    );
+  } // preload end
 
   create() {
     function multiply(a, b) {
@@ -287,7 +305,25 @@ link: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
       frameRate: 8,
       repeat: 10,
     });
-  }
+
+    this.anims.create({
+      key: "triLogoFight",
+      frames: this.anims.generateFrameNumbers("genTriComs", {
+        frames: [8],
+      }),
+      frameRate: 8,
+      repeat: 10,
+    });
+
+    this.anims.create({
+      key: "triLogoHit",
+      frames: this.anims.generateFrameNumbers("genTriComs", {
+        frames: [7],
+      }),
+      frameRate: 8,
+      repeat: 10,
+    });
+  } //create end
 
   update() {}
 }

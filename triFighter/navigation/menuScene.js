@@ -1,5 +1,6 @@
 const Phaser = require("phaser");
 import { gameState } from "../../game.js";
+import title from "../components/title"
 
 class MenuScene extends Phaser.Scene {
   constructor() {
@@ -11,15 +12,21 @@ class MenuScene extends Phaser.Scene {
   preload() {}
 
   create() {
-    this.add.text(95, 250, "Press T to Start Game!!", {
+    let game = this;
+    title(game, 0 , 0, 4);
+    this.add.text(350, 300, "Menu",{
+      fontSize: "30px",
+      fill: "#000000",
+    })
+    this.add.text(350, 400, "Press T to Start Game!!", {
       fontSize: "30px",
       fill: "#000000",
     });
-    this.add.text(95, 350, "Press M to exit Game.", {
+    this.add.text(350, 500, "Press M to exit Game.", {
       fontSize: "30px",
       fill: "#000000",
     });
-  }
+  }//Create end
 
   update() {
     const tKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);

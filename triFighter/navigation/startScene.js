@@ -1,5 +1,6 @@
 const Phaser = require("phaser");
 import { gameState } from "../../game.js";
+import title from "../components/title";
 
 class StartScene extends Phaser.Scene {
   constructor() {
@@ -11,11 +12,18 @@ class StartScene extends Phaser.Scene {
   preload() {}
 
   create() {
-    this.add.text(95, 250, "Press T for Story Mode", {
+    let game = this;
+
+    title(game, 0, 0, 4)
+    this.add.text(350, 300, "Start", {
+      fontSize: "30px",
+      fill: "#000000",
+    })
+    this.add.text(350, 400, "Press T for Story Mode", {
       fontSize: "30px",
       fill: "#000000",
     });
-    this.add.text(95, 350, "Press M to enter Menu", {
+    this.add.text(350, 500, "Press M to enter Menu", {
       fontSize: "30px",
       fill: "#000000",
     });
